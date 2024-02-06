@@ -1,7 +1,7 @@
 import pygame
 
 from screen import Screen
-from map import Map
+from src.screen.map import Map
 
 class Game:
     def __init__(self):
