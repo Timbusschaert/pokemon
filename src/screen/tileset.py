@@ -2,7 +2,7 @@ import pygame
 class TilesetEnum:
     COORDINATES = {
         0 : (7,1, True),
-        2 : (13,3,True),
+        2 : (13,3,False),
         3 : (15,3,False),
         5 : (14,5,False),
         11 : (6,0,False),
@@ -27,3 +27,7 @@ def get_tile_surface(tileset_image, tile_enum):
     tile_surface = tileset_image.subsurface(pygame.Rect(tile_x * tile_size, tile_y * 24, 24, 24))
     
     return [tile_surface,canPass,tile_enum]
+
+def canPass(tile_enum):
+    tile_x, tile_y , canPass = TilesetEnum.COORDINATES.get(tile_enum, (15, 5 , False))
+    return canPass
