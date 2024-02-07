@@ -19,8 +19,7 @@ def draw_map(surface, map_data, tileset_image ,joueur):
         for x in range(-10 , 10 ):
             tile_enum = map_data.get_tile(joueur.x + x  ,joueur.y + y)
             # Calcul des coordonnées dans le tileset
-            if x == 0 and y == 0 :
-                tile_enum = None
+            
             # Découpage de la tuile à partir du tileset
             tile_surface, canPass ,tile = tileset.get_tile_surface(tileset_image,tile_enum)
             # Dessin de la tuile sur la surface
