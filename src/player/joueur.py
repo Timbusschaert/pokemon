@@ -25,38 +25,42 @@ class Joueur(pygame.sprite.Sprite):
         self.listAnimation["LEFT"] = Animation("assets/bulbizarre/Walk-Anim-Left.png","assets/bulbizarre/AnimData.xml")
         self.image = self.listAnimation.get("DOWN")
         self.rect = self.image.image.get_rect()
-        self.rect.topleft = (205, 199)
+        self.rect.topleft = (240-12, 240-12)
         
     def deplacer(self,map):
-            moveX = -1 if self.dx > 0 else 1 
-            moveY = -1 if self.dy > 0 else 1
-            tile = map.get_tile(self.x + moveX , self.y + moveY)
-            canMove = canPass(tile)
-            print(canMove)
+           
             if(self.dx > 0):
+                tile = map.get_tile(self.x-1 , self.y)
+                canMove = canPass(tile)
+                
                 if canMove :
                     self.x -= 1
-                if self.direction != DirectionEnum.RIGHT:
-                    self.direction = DirectionEnum.RIGHT
-                    self.image = self.listAnimation.get("LEFT")
-            if(self.dx < 0):
-                if canMove :
-                    self.x += 1
                 if self.direction != DirectionEnum.LEFT:
                     self.direction = DirectionEnum.LEFT
+                    self.image = self.listAnimation.get("LEFT")
+            if(self.dx < 0):
+                tile = map.get_tile(self.x+1 , self.y)
+                canMove = canPass(tile)
+                if canMove :
+                    self.x += 1
+                if self.direction != DirectionEnum.RIGHT:
+                    self.direction = DirectionEnum.RIGHT
                 self.image = self.listAnimation.get("RIGHT")
 
             if(self.dy > 0):
+                tile = map.get_tile(self.x , self.y-1)
+                canMove = canPass(tile)
                 if canMove :
                     self.y -= 1
                 if self.direction != DirectionEnum.UP:
                     self.direction = DirectionEnum.UP
                     self.image = self.listAnimation.get("UP")
-
+                    
             if(self.dy < 0):
-                if canPass :
+                tile = map.get_tile(self.x , self.y + 1 )
+                canMove = canPass(tile)
+                if canMove :
                     self.y += 1
-
                 if self.direction != DirectionEnum.DOWN:
                     self.direction = DirectionEnum.DOWN
                     self.image = self.listAnimation.get("DOWN")

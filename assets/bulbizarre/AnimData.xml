@@ -8,12 +8,12 @@
 			<FrameWidth>40</FrameWidth>
 			<FrameHeight>27</FrameHeight>
 			<Durations>
-				<Duration>4</Duration>
-				<Duration>4</Duration>
-				<Duration>4</Duration>
-				<Duration>4</Duration>
-				<Duration>4</Duration>
-				<Duration>4</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
 			</Durations>
 		</Anim>
 		<Anim>

@@ -38,7 +38,8 @@ class Animation:
     def draw(self, surface, position):
 
         # Affichage de la surface d'animation sur la surface spécifiée
-        cropped_image = self.image.subsurface((self.current_frame * 40, 0 , self.frame_width, self.frame_height))
-
+        cropped_image = self.image.subsurface((self.current_frame * self.frame_width + 5 , 0 , self.frame_width -5, self.frame_height))
+        
+        #resized = pygame.transform.scale(cropped_image,(24,24))
 # Redimensionner l'image extraite à une taille de 24x24 pixels
         surface.blit(cropped_image,position)
