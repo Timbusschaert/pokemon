@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<AnimData>
+	<ShadowSize>1</ShadowSize>
+	<Anims>
+		<Anim>
+			<Name>Idle</Name>
+			<Index>1</Index>
+			<FrameWidth>32</FrameWidth>
+			<FrameHeight>40</FrameHeight>
+			<Durations>
+				<Duration>40</Duration>
+				<Duration>6</Duration>
+				<Duration>6</Duration>
+			</Durations>
+		</Anim>		
+	</Anims>
+</AnimData>

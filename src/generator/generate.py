@@ -68,6 +68,10 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
     spawn_x = random.randint(spawn_room.x, spawn_room.x + spawn_room.width - 1)
     spawn_y = random.randint(spawn_room.y, spawn_room.y + spawn_room.height - 1)
 
+    spawn_room = random.choice(rooms)
+    out_x = random.randint(spawn_room.x, spawn_room.x + spawn_room.width - 1)
+    out_y = random.randint(spawn_room.y, spawn_room.y + spawn_room.height - 1)
+    dungeon[out_y][out_x] = 20
     # Position de spawn
     spawn_position = (spawn_x, spawn_y)
 
@@ -87,7 +91,7 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
         }
     }
 
-    with open("assets/map.json", "w") as json_file:
+    with open("../../assets/map2.json", "w") as json_file:
         json.dump(dungeon_json, json_file, indent=2)
 
 class Rect:

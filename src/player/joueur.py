@@ -2,66 +2,130 @@ import pygame
 from src.screen.tileset import canPass
 from src.screen.animation import Animation
 from src.player.stats import Stats
-class DirectionEnum:
-    RIGHT = 0
-    LEFT = 1
-    UP = 2
-    DOWN = 3
+from src.player.animationsList import AnimationsList
+from src.player.directionEnum import DirectionEnum
     
 class Joueur(pygame.sprite.Sprite):
     
-    def __init__(self,x,y):
-        super().__init__()
-        self.dx = 0  # Déplacement horizontal
-        self.dy = 0  # Déplacement vertical
-        self.direction = DirectionEnum.DOWN
+    def __init__(self,group,x,y,pokemon,map):
+        super().__init__(group)
+       
+        self.directionAnim = DirectionEnum.DOWN
         self.x = x
         self.y = y
-        self.listAnimation = dict()
-        self.listAnimation["DOWN"] = Animation("assets/bulbizarre/Walk-Anim-Down.png","assets/bulbizarre/AnimData.xml")
-        self.listAnimation["UP"] = Animation("assets/bulbizarre/Walk-Anim-Up.png","assets/bulbizarre/AnimData.xml")
-        self.listAnimation["RIGHT"] = Animation("assets/bulbizarre/Walk-Anim-Right.png","assets/bulbizarre/AnimData.xml")
-        self.listAnimation["LEFT"] = Animation("assets/bulbizarre/Walk-Anim-Left.png","assets/bulbizarre/AnimData.xml")
-        self.image = self.listAnimation.get("DOWN")
-        self.rect = self.image.image.get_rect()
-        self.rect.topleft = (240-12, 240-12)
+        self.animationList = AnimationsList(pokemon)        
+        self.image = self.animationList.getIdleAnimation(self.directionAnim)
+        self.rect = self.image.image.get_rect(center = (x*24,y*24))
+        self.direction = pygame.math.Vector2()
+        self.speed = 2
         self.stats = Stats()
+        self.map = map
+        self.action = False
+        self.isOnStair= False
+        self.distanceParcourue = 0
+        self.canMove = True
+   
+       
+    def input(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP]:
+            self.direction.y = 0 if keys[pygame.K_RIGHT] or  keys[pygame.K_LEFT] else - self.speed
+            self.distanceParcourue += self.speed 
+        elif keys[pygame.K_DOWN]:
+            self.direction.y = 0 if keys[pygame.K_RIGHT] or  keys[pygame.K_LEFT] else self.speed
+            self.distanceParcourue += self.speed 
+        elif self.distanceParcourue == 0:
+            self.direction.y = 0       
+        else :
+            self.distanceParcourue += self.speed
+        if keys[pygame.K_RIGHT]:
+            self.direction.x = 0 if keys[pygame.K_UP] or  keys[pygame.K_DOWN] else self.speed
+            self.distanceParcourue += self.speed 
+        elif keys[pygame.K_LEFT]:
+            self.direction.x = - 0 if keys[pygame.K_UP] or  keys[pygame.K_DOWN] else -  self.speed
+            self.distanceParcourue += self.speed
+        elif self.distanceParcourue == 0:
+            self.direction.x = 0   
+        elif self.distanceParcourue < 22 * self.speed  :
+            self.distanceParcourue += self.speed
         
-    def deplacer(self,map):          
-            if(self.dx > 0):
-                tile = map.get_tile(self.x-1 , self.y)
-                canMove = canPass(tile)               
-                if canMove :
+        if keys[pygame.K_a]:
+            self.attack()
+            
+    def update(self):
+        self.input()
+        print(self.distanceParcourue)
+        if self.distanceParcourue >= (24 * self.speed) - self.speed:
+            self.distanceParcourue = 0   
+        
+        if(self.direction.x < 0 and self.direction.y == 0):
+                tile = self.map.get_tile(self.x -1 , self.y)
+                self.canMove = canPass(tile)   
+                if self.canMove and self.distanceParcourue == 0:
                     self.x -= 1
-                    
-                if self.direction != DirectionEnum.LEFT:
-                    self.direction = DirectionEnum.LEFT
-                    self.image = self.listAnimation.get("LEFT")
-            if(self.dx < 0):
-                tile = map.get_tile(self.x+1 , self.y)
-                canMove = canPass(tile)
-                if canMove :
+                if self.directionAnim != DirectionEnum.LEFT:
+                    self.directionAnim = DirectionEnum.LEFT 
+
+        if(self.direction.x > 0 and self.direction.y == 0):
+                tile = self.map.get_tile(self.x+1 , self.y)
+                self.canMove = canPass(tile)
+                if self.canMove and self.distanceParcourue == 0:
                     self.x += 1
-                if self.direction != DirectionEnum.RIGHT:
-                    self.direction = DirectionEnum.RIGHT
-                self.image = self.listAnimation.get("RIGHT")
+                if self.directionAnim != DirectionEnum.RIGHT:
+                    self.directionAnim = DirectionEnum.RIGHT
 
-            if(self.dy > 0):
-                tile = map.get_tile(self.x , self.y-1)
-                canMove = canPass(tile)
-                if canMove :
+        if(self.direction.y < 0 and self.direction.x == 0):
+                tile = self.map.get_tile(self.x , self.y-1)
+                self.canMove = canPass(tile)
+                if self.canMove and self.distanceParcourue == 0:
                     self.y -= 1
-                if self.direction != DirectionEnum.UP:
-                    self.direction = DirectionEnum.UP
-                    self.image = self.listAnimation.get("UP")
-                    
-            if(self.dy < 0):
-                tile = map.get_tile(self.x , self.y + 1 )
-                canMove = canPass(tile)
-                if canMove :
+                if self.directionAnim != DirectionEnum.UP:
+                    self.directionAnim = DirectionEnum.UP               
+        if(self.direction.y > 0 and self.direction.x == 0):
+                tile = self.map.get_tile(self.x , self.y + 1 )
+                self.canMove = canPass(tile)
+                if self.canMove and self.distanceParcourue == 0:
                     self.y += 1
-                if self.direction != DirectionEnum.DOWN:
-                    self.direction = DirectionEnum.DOWN
-                    self.image = self.listAnimation.get("DOWN")
+                if self.directionAnim != DirectionEnum.DOWN:
+                    self.directionAnim = DirectionEnum.DOWN
 
+        if(self.direction.y > 0 and self.direction.x > 0 ):
+                
+                if self.directionAnim != DirectionEnum.DOWN_RIGHT:
+                    self.directionAnim = DirectionEnum.DOWN_RIGHT
 
+        if(self.direction.y > 0 and self.direction.x < 0 ):
+               
+                if self.directionAnim != DirectionEnum.DOWN_LEFT:
+                    self.directionAnim = DirectionEnum.DOWN_LEFT
+                    
+        if(self.direction.y < 0 and self.direction.x > 0 ):
+                
+                if self.directionAnim != DirectionEnum.TOP_RIGHT:
+                    self.directionAnim = DirectionEnum.TOP_RIGHT
+
+        if(self.direction.y < 0 and self.direction.x < 0 ):
+               
+                if self.directionAnim != DirectionEnum.TOP_LEFT:
+                    self.directionAnim = DirectionEnum.TOP_LEFT
+                
+        self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)    
+        if 20 == self.map.get_tile(self.x , self.y ):
+                self.isOnStair = True
+
+        if(self.canMove and not self.isOnStair  ):
+            self.rect.centerx += self.direction.x     
+            self.rect.centery += self.direction.y 
+         
+    
+    def attack(self):
+        self.image = self.animationList.getAttackAnimation(self.directionAnim)
+        self.rect = self.image.image.get_rect(center = (self.x*24,self.y*24))
+        self.isAnimated = True
+
+    def isInAnimation(self):
+        self.isAnimated = self.image.current_frame != 0
+        if(self.isAnimated):
+            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)
+
+  

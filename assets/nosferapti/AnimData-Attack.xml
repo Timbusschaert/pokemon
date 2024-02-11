@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<AnimData>
+	<ShadowSize>0</ShadowSize>
+	<Anims>
+		<Anim>
+			<Name>Attack</Name>
+			<Index>1</Index>
+			<FrameWidth>72</FrameWidth>
+			<FrameHeight>80</FrameHeight>
+			<RushFrame>2</RushFrame>
+			<HitFrame>4</HitFrame>
+			<ReturnFrame>7</ReturnFrame>
+			<Durations>
+				<Duration>2</Duration>
+				<Duration>3</Duration>
+				<Duration>4</Duration>
+				<Duration>1</Duration>
+				<Duration>1</Duration>
+				<Duration>1</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+				<Duration>2</Duration>
+			</Durations>
+		</Anim>
+	</Anims>
+</AnimData>

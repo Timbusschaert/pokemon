@@ -1,10 +1,10 @@
 from src.screen.tileset import TilesetEnum 
 import json
 class Map:
-    def __init__(self, width, height):
+    def __init__(self, width, height,jsonFile):
         self.width = width
         self.height = height
-        f = open("assets/map.json")
+        f = open(jsonFile)
         self.tiles = json.load(f)['map']['tiles']
 
     def set_tile(self, x, y, tile_enum):
