@@ -24,7 +24,7 @@ class CameraGroup(pygame.sprite.Group):
 		self.keyboard_speed = 10
 
 		# zoom 
-		self.zoom_scale = 1
+		self.zoom_scale = 1.5
 		self.internal_surf_size = (2500,2500)
 		self.internal_surf = pygame.Surface(self.internal_surf_size, pygame.SRCALPHA)
 		self.internal_rect = self.internal_surf.get_rect(center = (self.half_w,self.half_h))
@@ -76,6 +76,6 @@ class CameraGroup(pygame.sprite.Group):
 			offset_pos = (sprite.rect.centerx + ( 24 - sprite.image.frame_width) // 2 ,sprite.rect.centery + ( 24 - sprite.image.frame_height)//2) - self.offset + self.internal_offset
 			sprite.image.draw(self.internal_surf,offset_pos)
 		scaled_surf = pygame.transform.scale(self.internal_surf ,self.internal_surface_size_vector * self.zoom_scale)
-		scaled_rect = scaled_surf.get_rect(center = (self.half_w -200,self.half_h))
+		scaled_rect = scaled_surf.get_rect(center = (self.half_w,self.half_h))
 
 		self.display_surface.blit(scaled_surf,scaled_rect)

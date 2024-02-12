@@ -4,8 +4,7 @@ class Map:
     def __init__(self, width, height,jsonFile):
         self.width = width
         self.height = height
-        f = open(jsonFile)
-        self.tiles = json.load(f)['map']['tiles']
+        self.tiles = jsonFile['tiles']
 
     def set_tile(self, x, y, tile_enum):
         if 0 <= x < self.width and 0 <= y < self.height:

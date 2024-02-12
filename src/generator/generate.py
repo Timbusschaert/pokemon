@@ -1,7 +1,7 @@
 import random
 import json
 
-def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8, max_room_size=20):
+def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8, max_room_size=15,index=1):
     dungeon = [[5] * width for _ in range(height)]
     rooms = []
 
@@ -65,12 +65,12 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
 
     # Choix aléatoire d'une salle pour le spawn
     spawn_room = random.choice(rooms)
-    spawn_x = random.randint(spawn_room.x, spawn_room.x + spawn_room.width - 1)
-    spawn_y = random.randint(spawn_room.y, spawn_room.y + spawn_room.height - 1)
+    spawn_x = random.randint(spawn_room.x+1, spawn_room.x + spawn_room.width - 2)
+    spawn_y = random.randint(spawn_room.y+1, spawn_room.y + spawn_room.height - 2)
 
     spawn_room = random.choice(rooms)
-    out_x = random.randint(spawn_room.x, spawn_room.x + spawn_room.width - 1)
-    out_y = random.randint(spawn_room.y, spawn_room.y + spawn_room.height - 1)
+    out_x = random.randint(spawn_room.x+1, spawn_room.x + spawn_room.width - 2)
+    out_y = random.randint(spawn_room.y+1, spawn_room.y + spawn_room.height - 2)
     dungeon[out_y][out_x] = 20
     # Position de spawn
     spawn_position = (spawn_x, spawn_y)
@@ -83,16 +83,17 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
 
     dungeon_json = {
         "map": {
-            "nom": "Donjon Mystère",
+            "nom": "Grotte sombre",
             "largeur": width,
+            "etage": index,
             "hauteur": height,
             "tiles": dungeon,
             "spawn": spawn_position
         }
     }
+    return dungeon_json
 
-    with open("../../assets/map2.json", "w") as json_file:
-        json.dump(dungeon_json, json_file, indent=2)
+   
 
 class Rect:
     def __init__(self, x, y, width, height):
@@ -117,4 +118,12 @@ class Rect:
 # Exemple d'utilisation
 width = 100
 height = 100
-generate_dungeon_with_corridors(width, height)
+maps = []
+
+for i in range(1,4): 
+    maps.append(generate_dungeon_with_corridors(width, height,index="E. " + str(i)))
+
+maps.append(generate_dungeon_with_corridors(100, 100,1,10,10,index="Sommet"))
+data = {"maps" : maps}
+with open("dungeon.json", "w") as json_file:
+        json.dump(data, json_file, indent=2)
