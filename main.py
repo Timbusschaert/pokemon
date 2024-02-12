@@ -28,12 +28,14 @@ TILE_SIZE_ = 24  # Taille de chaque tuile en pixels
 tileset_image = pygame.image.load("assets/map.png")
 tileset_items = pygame.image.load("assets/items/items.png")
 
-
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255, 1)
 RED = (242, 38, 19)
 GREEN = (178,222,39)
 ORANGE = (196,0,51,1)
+
+all_bot = []
+
 def draw_map(surface, map_data, tileset_image,tileset_items,player):
     for y in range(0 , 100):
         for x in range(0 , 100 ):
@@ -43,9 +45,7 @@ def draw_map(surface, map_data, tileset_image,tileset_items,player):
             tile_surface, canPass ,tile = tileset.get_tile_surface(tileset_image,tileset_items,tile_enum)
             # Dessin de la tuile sur la surface
             surface.blit(tile_surface, ((x) * TILE_SIZE, (y) * TILE_SIZE ))
-            
-            
-
+                        
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
@@ -97,18 +97,16 @@ def main():
     map_data = Map(100, 100,"assets/map.json")
     f = open("assets/map.json")
     pos = json.load(f)['map']['spawn']                   
-   
-
     stair_sound = pygame.mixer.Sound("assets/musique/sounds/song340.mp3")
     stair_sound.set_volume(0.01)
     # Création de la carte
     screen = pygame.display.set_mode(WINDOW_SIZE)
     screen_map = pygame.Surface((100 * TILE_SIZE, 100 * TILE_SIZE))
     camera_group = CameraGroup(screen_map)
+    all_bot.append(Bot(camera_group,pos[0] + 5 , pos[1] + 5,"bulbizarre",map_data))
     player = Joueur(camera_group,pos[0],pos[1],"nosferapti",map_data)
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
     info_bar = InfoBar(player,screen)
-    clock_animation = pygame.time.Clock()  # Horloge pour les animations
     
     animationEtage(screen,"E. -1",camera_group,player)
     pygame.mixer.music.load("assets/musique/fond.mp3")
@@ -144,16 +142,22 @@ def main():
                             player.isOnStair = False
             
         screen.fill('#71ddee')
-        
+        print(player.rect)
         camera_group.custom_draw(player)
+        pygame.draw.rect(screen_map, (0, 255, 0), player.rect, 2)  # Rectangle vert autour du joueur
+        print(player.rect)
+        if player.isAttacking:
+            for bot in all_bot:
+                print(player.rect)
+                print(bot.rect)
+                if player.rect.colliderect(bot.rect):
+                    bot.takeDamage(10)
         player.image.update()
-        
-        
         info_bar.draw_info()
         camera_group.update()   
         if(player.isOnStair):
             draw_menu(screen,option_selectionnee)
         pygame.display.update()
-
+        
 if __name__ == "__main__":
     main()

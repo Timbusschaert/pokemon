@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<AnimData>
+	<ShadowSize>1</ShadowSize>
+	<Anims>
+		<Anim>
+		<Name>Hurt</Name>
+			<Name>Hurt</Name>
+			<Index>6</Index>
+			<FrameWidth>40</FrameWidth>
+			<FrameHeight>48</FrameHeight>
+			<Durations>
+				<Duration>2</Duration>
+				<Duration>8</Duration>
+			</Durations>
+		</Anim>
+	</Anims>
+</AnimData>

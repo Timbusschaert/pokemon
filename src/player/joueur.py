@@ -8,8 +8,7 @@ from src.player.directionEnum import DirectionEnum
 class Joueur(pygame.sprite.Sprite):
     
     def __init__(self,group,x,y,pokemon,map):
-        super().__init__(group)
-       
+        super().__init__(group)     
         self.directionAnim = DirectionEnum.DOWN
         self.x = x
         self.y = y
@@ -17,47 +16,46 @@ class Joueur(pygame.sprite.Sprite):
         self.image = self.animationList.getIdleAnimation(self.directionAnim)
         self.rect = self.image.image.get_rect(center = (x*24,y*24))
         self.direction = pygame.math.Vector2()
-        self.speed = 2
+        self.speed = 4
         self.stats = Stats()
         self.map = map
-        self.action = False
+        self.isAttacking = False
         self.isOnStair= False
         self.distanceParcourue = 0
         self.canMove = True
-   
-       
+        self.isAttacked = False
+    
     def input(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_UP]:
-            self.direction.y = 0 if keys[pygame.K_RIGHT] or  keys[pygame.K_LEFT] else - self.speed
+            self.direction.y = 0 if self.direction.x != 0 else - self.speed
             self.distanceParcourue += self.speed 
         elif keys[pygame.K_DOWN]:
-            self.direction.y = 0 if keys[pygame.K_RIGHT] or  keys[pygame.K_LEFT] else self.speed
+            self.direction.y = 0 if self.direction.x != 0 else self.speed
             self.distanceParcourue += self.speed 
         elif self.distanceParcourue == 0:
             self.direction.y = 0       
         else :
             self.distanceParcourue += self.speed
         if keys[pygame.K_RIGHT]:
-            self.direction.x = 0 if keys[pygame.K_UP] or  keys[pygame.K_DOWN] else self.speed
+            self.direction.x = 0 if self.direction.y != 0 else self.speed
             self.distanceParcourue += self.speed 
         elif keys[pygame.K_LEFT]:
-            self.direction.x = - 0 if keys[pygame.K_UP] or  keys[pygame.K_DOWN] else -  self.speed
+            self.direction.x = - 0 if self.direction.y != 0 else -  self.speed
             self.distanceParcourue += self.speed
         elif self.distanceParcourue == 0:
             self.direction.x = 0   
-        elif self.distanceParcourue < 22 * self.speed  :
+        elif self.distanceParcourue < (23 * self.speed) - self.speed  :
             self.distanceParcourue += self.speed
         
         if keys[pygame.K_a]:
             self.attack()
+        
             
     def update(self):
-        self.input()
-        print(self.distanceParcourue)
-        if self.distanceParcourue >= (24 * self.speed) - self.speed:
+        self.input()       
+        if self.distanceParcourue >= (24 * 2 ) - self.speed:
             self.distanceParcourue = 0   
-        
         if(self.direction.x < 0 and self.direction.y == 0):
                 tile = self.map.get_tile(self.x -1 , self.y)
                 self.canMove = canPass(tile)   
@@ -65,7 +63,6 @@ class Joueur(pygame.sprite.Sprite):
                     self.x -= 1
                 if self.directionAnim != DirectionEnum.LEFT:
                     self.directionAnim = DirectionEnum.LEFT 
-
         if(self.direction.x > 0 and self.direction.y == 0):
                 tile = self.map.get_tile(self.x+1 , self.y)
                 self.canMove = canPass(tile)
@@ -73,7 +70,6 @@ class Joueur(pygame.sprite.Sprite):
                     self.x += 1
                 if self.directionAnim != DirectionEnum.RIGHT:
                     self.directionAnim = DirectionEnum.RIGHT
-
         if(self.direction.y < 0 and self.direction.x == 0):
                 tile = self.map.get_tile(self.x , self.y-1)
                 self.canMove = canPass(tile)
@@ -88,41 +84,44 @@ class Joueur(pygame.sprite.Sprite):
                     self.y += 1
                 if self.directionAnim != DirectionEnum.DOWN:
                     self.directionAnim = DirectionEnum.DOWN
-
         if(self.direction.y > 0 and self.direction.x > 0 ):
-                
                 if self.directionAnim != DirectionEnum.DOWN_RIGHT:
                     self.directionAnim = DirectionEnum.DOWN_RIGHT
-
         if(self.direction.y > 0 and self.direction.x < 0 ):
-               
                 if self.directionAnim != DirectionEnum.DOWN_LEFT:
-                    self.directionAnim = DirectionEnum.DOWN_LEFT
-                    
-        if(self.direction.y < 0 and self.direction.x > 0 ):
-                
+                    self.directionAnim = DirectionEnum.DOWN_LEFT                    
+        if(self.direction.y < 0 and self.direction.x > 0 ):                
                 if self.directionAnim != DirectionEnum.TOP_RIGHT:
                     self.directionAnim = DirectionEnum.TOP_RIGHT
-
-        if(self.direction.y < 0 and self.direction.x < 0 ):
-               
+        if(self.direction.y < 0 and self.direction.x < 0 ):               
                 if self.directionAnim != DirectionEnum.TOP_LEFT:
                     self.directionAnim = DirectionEnum.TOP_LEFT
                 
-        self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)    
         if 20 == self.map.get_tile(self.x , self.y ):
                 self.isOnStair = True
-
-        if(self.canMove and not self.isOnStair  ):
+        if self.direction.x == 0 and self.direction.y == 0:
+            if self.isAttacking:
+                self.isAttacking = not self.image.getIsFinished()
+            elif self.isAttacked:
+                self.image = self.animationList.getHurtAnimation(self.directionAnim)
+                self.isAttacked = not self.image.getIsFinished()
+            else :
+                self.image = self.animationList.getIdleAnimation(self.directionAnim)
+ 
+        else:
+            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)  
+        if( self.canMove and not self.isOnStair ):
             self.rect.centerx += self.direction.x     
-            self.rect.centery += self.direction.y 
-         
+            self.rect.centery += self.direction.y      
     
     def attack(self):
         self.image = self.animationList.getAttackAnimation(self.directionAnim)
-        self.rect = self.image.image.get_rect(center = (self.x*24,self.y*24))
-        self.isAnimated = True
+        self.isAttacking = True
 
+    def takeDamage(self,damage):
+        self.isAttacked = True
+        self.image = self.animationList.getHurtAnimation(self.directionAnim)        
+    
     def isInAnimation(self):
         self.isAnimated = self.image.current_frame != 0
         if(self.isAnimated):

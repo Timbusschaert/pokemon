@@ -2,14 +2,12 @@ from src.player.joueur import Joueur,DirectionEnum
 from src.screen.tileset import canPass
 import random
 class Bot(Joueur):
-    def __init__(self,group,x,y,map):
-        super().__init__(group,x,y,map)
+    def __init__(self,group,x,y,pokemon,map):
+        super().__init__(group,x,y,pokemon,map)
      
     def calcul_next_pos(self, joueur,map):
         if (joueur.x - 10 <= self.x or joueur.x + 10 >= self.x )and (joueur.y-10 >= self.y or joueur.y + 10 >= self.y ):
-            next_x, next_y = self.generate_next_pos(self.map)
-            self.direction.x = next_x * - 6
-            self.direction.y = next_y * - 6
+            print('else')
         else :
             print('else')
 

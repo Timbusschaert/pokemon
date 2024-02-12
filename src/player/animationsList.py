@@ -11,6 +11,8 @@ class AnimationsList():
         self.initWalk()
         self.attack = dict()
         self.initAttack()
+        self.hurt = dict()
+        self.initHurt()
        
 
     def initWalk(self):
@@ -52,6 +54,19 @@ class AnimationsList():
         self.idle[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10)
         self.idle[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)
 
+    def initHurt(self):
+        image = pygame.image.load("assets/"+str(self.pokemon)+"/Hurt-Anim.png")
+        tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData-Hurt.xml")
+
+        self.hurt[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10)
+        self.hurt[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10)
+        self.hurt[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10)
+        self.hurt[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10)
+        self.hurt[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10)
+        self.hurt[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10)
+        self.hurt[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10)
+        self.hurt[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)          
+    
     def getWalkCurrentAnimation(self,enumDirection):
         return self.walk.get(enumDirection)
     
@@ -60,3 +75,6 @@ class AnimationsList():
     
     def getIdleAnimation(self,enumDirection):
         return self.idle.get(enumDirection)
+    
+    def getHurtAnimation(self,enumDirection):
+        return self.hurt.get(enumDirection)

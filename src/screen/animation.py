@@ -38,7 +38,10 @@ class Animation:
         if self.frame_counter >= self.durations[self.current_frame]:
             self.frame_counter = 0
             self.current_frame = (self.current_frame + 1) % self.total_frames
-
+    
+    def getIsFinished(self):
+        return self.current_frame == 0 
+    
     def draw(self, surface, position):
         # Calcul de la position de l'ombre
         #shadow_image = self.shadow_image.subsurface((self.current_frame * self.frame_width, self.frame_height * self.direction, self.frame_width, self.frame_height))
