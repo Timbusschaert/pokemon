@@ -20,7 +20,12 @@ class TilesetEnum:
         8 : (12,2,False),   
         9 : (3,0,False),     
         10 : (8,1,False),
-        20 : (3,8,True),                                   
+        20 : (3,8,True), 
+        21 : (7,1,False),
+        22 : (9,1,False),
+        23 : (4,0,False),
+        24 : (7,0,False),
+                      
         None : (14,5,False) 
     }
     

@@ -49,6 +49,7 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
 
         while y != end_y:
             dungeon[y][x] = 0            
+
             if y < end_y:
                 y += 1
             elif y > end_y:
@@ -59,30 +60,41 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
         end_x, end_y = end
         startX = x 
         startY = y
-          
+        
         while x != end_x:
             if(dungeon[y+1][x] != 0 and x != startX and (y + 1 != end_y and y + 1!= startY)):
                 dungeon[y+1][x] = 12 if dungeon[y+1][x] != 0 else 0 # Zone traversable
             if(dungeon[y-1][x] != 0 and x != startX and (y - 1 != end_y and y - 1 != startY)):
                 dungeon[y-1][x] = 11 if dungeon[y-1][x] != 0 else 0 # Zone traversable
             
-            if(dungeon[y-1][x-1] == 0 and dungeon[y][x-1] == 10 and dungeon[y+1][x1] == 12 ):
-                        dungeon[y][x+1] = 3  if dungeon[y+1][x] != 0 else 3
-            if(dungeon[y-1][x-1] != 0 and dungeon[y-1][x] == 10 and dungeon[y-1][x+1] == 12 ):
-                        dungeon[y][x-1] = 4   if dungeon[y-1][x] != 0 else 4
-            if x < end_x:   
-                x += 1
-            elif x > end_x:              
-                x -= 1
+            if(dungeon[y][x] == 0 and dungeon[y+2][x] == 10 and dungeon[y+1][x] == 12 ):
+                    dungeon[y+1][x] = 21  if dungeon[y+1][x] != 0 else 0
+            if(dungeon[y][x] == 0 and dungeon[y-2][x] == 10 and dungeon[y-1][x] == 11 ):
+                    dungeon[y-1][x] = 22   if dungeon[y-1][x] != 0 else 0  
+            if(dungeon[y][x] == 0 and dungeon[y+2][x] == 9 and dungeon[y+1][x] == 12 ):
+                    dungeon[y+1][x] = 24  if dungeon[y+1][x] != 0 else 0
+            if(dungeon[y][x] == 0 and dungeon[y-2][x] == 9 and dungeon[y-1][x] == 11 ):
+                    dungeon[y-1][x] = 23   if dungeon[y-1][x] != 0 else 0               
+            if x < end_x:
                 
+                x += 1
+            elif x > end_x: 
+                
+                x -= 1
+
         while y != end_y:
+            dungeon
             if(dungeon[y][x+1] != 0 and y != startY and (x + 1 != end_x and x + 1!= startX)):
                 dungeon[y][x+1] = 10 if dungeon[y][x+1] != 0 else 0 # Zone traversable
             if(dungeon[y][x-1] != 0 and y != startY and (x - 1 != end_x and x - 1!= startX)):
-                dungeon[y][x-1] = 9 if dungeon[y][x-1] != 0 else 0 # Zone traversable              
+                dungeon[y][x-1] = 9 if dungeon[y][x-1] != 0 else 0  # Zone traversable              
+           
+            
             if y < end_y:
+               
                 y += 1
             elif y > end_y:
+               
                 y -= 1
         
     for _ in range(num_rooms):
