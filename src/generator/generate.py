@@ -62,14 +62,14 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
           
         while x != end_x:
             if(dungeon[y+1][x] != 0 and x != startX and (y + 1 != end_y and y + 1!= startY)):
-                dungeon[y+1][x] = 12  # Zone traversable
+                dungeon[y+1][x] = 12 if dungeon[y+1][x] != 0 else 0 # Zone traversable
             if(dungeon[y-1][x] != 0 and x != startX and (y - 1 != end_y and y - 1 != startY)):
-                dungeon[y-1][x] = 11  # Zone traversable
+                dungeon[y-1][x] = 11 if dungeon[y-1][x] != 0 else 0 # Zone traversable
             
-            if(dungeon[y+1][x-1] == 0 and dungeon[y+1][x] == 10 and dungeon[y+1][x+1] == 12 ):
-                        dungeon[y+1][x] = 3  if dungeon[y+1][x] != 0 else 3
+            if(dungeon[y-1][x-1] == 0 and dungeon[y][x-1] == 10 and dungeon[y+1][x1] == 12 ):
+                        dungeon[y][x+1] = 3  if dungeon[y+1][x] != 0 else 3
             if(dungeon[y-1][x-1] != 0 and dungeon[y-1][x] == 10 and dungeon[y-1][x+1] == 12 ):
-                        dungeon[y-1][x] = 4   if dungeon[y-1][x] != 0 else 4
+                        dungeon[y][x-1] = 4   if dungeon[y-1][x] != 0 else 4
             if x < end_x:   
                 x += 1
             elif x > end_x:              
