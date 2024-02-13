@@ -37,21 +37,54 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
     def add_corridor(start, end):
         x, y = start
         end_x, end_y = end
-
+        startX = x 
+        startY = y
+        
         while x != end_x:
-            dungeon[y][x] = 0  # Zone traversable
+            dungeon[y][x] = 0 # Zone traversable               
             if x < end_x:
                 x += 1
             elif x > end_x:
                 x -= 1
 
         while y != end_y:
-            dungeon[y][x] = 0  # Zone traversable
+            dungeon[y][x] = 0            
+            if y < end_y:
+                y += 1
+            elif y > end_y:
+                y -= 1           
+                
+        
+        x, y = start
+        end_x, end_y = end
+        startX = x 
+        startY = y
+          
+        while x != end_x:
+            if(dungeon[y+1][x] != 0 and x != startX and (y + 1 != end_y and y + 1!= startY)):
+                dungeon[y+1][x] = 12  # Zone traversable
+            if(dungeon[y-1][x] != 0 and x != startX and (y - 1 != end_y and y - 1 != startY)):
+                dungeon[y-1][x] = 11  # Zone traversable
+            
+            if(dungeon[y+1][x-1] == 0 and dungeon[y+1][x] == 10 and dungeon[y+1][x+1] == 12 ):
+                        dungeon[y+1][x] = 3  if dungeon[y+1][x] != 0 else 3
+            if(dungeon[y-1][x-1] != 0 and dungeon[y-1][x] == 10 and dungeon[y-1][x+1] == 12 ):
+                        dungeon[y-1][x] = 4   if dungeon[y-1][x] != 0 else 4
+            if x < end_x:   
+                x += 1
+            elif x > end_x:              
+                x -= 1
+                
+        while y != end_y:
+            if(dungeon[y][x+1] != 0 and y != startY and (x + 1 != end_x and x + 1!= startX)):
+                dungeon[y][x+1] = 10 if dungeon[y][x+1] != 0 else 0 # Zone traversable
+            if(dungeon[y][x-1] != 0 and y != startY and (x - 1 != end_x and x - 1!= startX)):
+                dungeon[y][x-1] = 9 if dungeon[y][x-1] != 0 else 0 # Zone traversable              
             if y < end_y:
                 y += 1
             elif y > end_y:
                 y -= 1
-
+        
     for _ in range(num_rooms):
         room_width = random.randint(min_room_size, max_room_size)
         room_height = random.randint(min_room_size, max_room_size)
@@ -125,5 +158,5 @@ for i in range(1,4):
 
 maps.append(generate_dungeon_with_corridors(100, 100,1,10,10,index="Sommet"))
 data = {"maps" : maps}
-with open("dungeon.json", "w") as json_file:
+with open("assets/dungeon.json", "w") as json_file:
         json.dump(data, json_file, indent=2)

@@ -2,17 +2,24 @@ import pygame
 import random
 class TilesetEnum:
     COORDINATES = {
-        0 : (7,1, True),
-        1 : (7,2,True),
-        2 : (13,3,False),
-        3 : (15,3,False),
-        5 : (14,5,False),
-        11 : (6,0,False),
-        12 : (6,0,False),
-        8 : (14,3,False),
-        4 : (4,3,False),   
-        10 : (2,1,False),     
-        9 : (2,1,False),
+        0 : (9,0, True),
+        101 : (3,4, True),
+        102 : (5,4, True),
+        103 : (3,4, True),
+        104 : (4,4, True),
+        105 : (5,4, True),
+        106 : (6, 4,True),
+
+        1 : (4,3,True),
+        2 : (11,2,False),
+        3 : (10,2,False),
+        5 : (1,0,False),
+        11 : (2,0,False),
+        12 : (5,0,False),
+        4 : (7,3,False),
+        8 : (12,2,False),   
+        9 : (3,0,False),     
+        10 : (8,1,False),
         20 : (3,8,True),                                   
         None : (14,5,False) 
     }
@@ -25,8 +32,8 @@ tile_size_= 24
 
 def get_tile_surface(tileset_image, tileset_items,tile_enum):
     value = tile_enum
-    if tile_enum == 0 :
-        value = random.choice([0,1])
+    if value == 0 :
+        value = random.choice([0,101,102,103,104,105,106])
     # Obtenez les coordonnées x et y à partir de l'énumération de la tuile
     tile_x, tile_y , canPass = TilesetEnum.COORDINATES.get(value, (15, 5 , False))
     # Découpage de la tuile à partir du tileset
