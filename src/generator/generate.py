@@ -49,7 +49,6 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
 
         while y != end_y:
             dungeon[y][x] = 0            
-
             if y < end_y:
                 y += 1
             elif y > end_y:
@@ -62,40 +61,49 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
         startY = y
         
         while x != end_x:
+            if x < end_x:               
+                x += 1
+            elif x > end_x:                
+                x -= 1
             if(dungeon[y+1][x] != 0 and x != startX and (y + 1 != end_y and y + 1!= startY)):
                 dungeon[y+1][x] = 12 if dungeon[y+1][x] != 0 else 0 # Zone traversable
-            if(dungeon[y-1][x] != 0 and x != startX and (y - 1 != end_y and y - 1 != startY)):
+            if(dungeon[y-1][x] != 0 and x != startX and (y - 1 != end_y and y - 1!= startY)):
                 dungeon[y-1][x] = 11 if dungeon[y-1][x] != 0 else 0 # Zone traversable
+           
+            #horizontal droit
+            if(dungeon[y][x] == 0 and (dungeon[y+2][x] == 10 or dungeon[y+2][x] == 3 )  and (dungeon[y+1][x] == 12 or dungeon[y+1][x] == 3 ) ):
+                    dungeon[y+1][x] = 21  if dungeon[y+1][x] != 22 else 50 if dungeon[y+1][x] != 0 else 0
+            if(dungeon[y][x] == 0 and ( dungeon[y-2][x] == 10 or dungeon[y-2][x] == 4) and (dungeon[y-1][x] == 11 or dungeon[y-1][x] == 4 ) ):
+                    dungeon[y-1][x] = 22  if dungeon[y-1][x] != 21 else 50 if dungeon[y-1][x] != 0 else 0  
+            #horitontal gauche
+            if(dungeon[y][x] == 0 and (dungeon[y+2][x] == 9 or dungeon[y+2][x] == 2 ) and (dungeon[y+1][x] == 12 or dungeon[y+1][x] == 2 )):
+                    dungeon[y+1][x] = 24 if dungeon[y+1][x] != 23 else 50 if dungeon[y+1][x] != 0 else 0
+            if(dungeon[y][x] == 0 and (dungeon[y-2][x] == 9 or dungeon[y-2][x] == 8 )and (dungeon[y-1][x] == 11 or dungeon[y-1][x] == 8 )):
+                    dungeon[y-1][x] = 23 if dungeon[y-1][x] != 24 else 50 if dungeon[y-1][x] != 0 else 0               
             
-            if(dungeon[y][x] == 0 and dungeon[y+2][x] == 10 and dungeon[y+1][x] == 12 ):
-                    dungeon[y+1][x] = 21  if dungeon[y+1][x] != 0 else 0
-            if(dungeon[y][x] == 0 and dungeon[y-2][x] == 10 and dungeon[y-1][x] == 11 ):
-                    dungeon[y-1][x] = 22   if dungeon[y-1][x] != 0 else 0  
-            if(dungeon[y][x] == 0 and dungeon[y+2][x] == 9 and dungeon[y+1][x] == 12 ):
-                    dungeon[y+1][x] = 24  if dungeon[y+1][x] != 0 else 0
-            if(dungeon[y][x] == 0 and dungeon[y-2][x] == 9 and dungeon[y-1][x] == 11 ):
-                    dungeon[y-1][x] = 23   if dungeon[y-1][x] != 0 else 0               
-            if x < end_x:
-                
-                x += 1
-            elif x > end_x: 
-                
-                x -= 1
 
         while y != end_y:
-            dungeon
-            if(dungeon[y][x+1] != 0 and y != startY and (x + 1 != end_x and x + 1!= startX)):
-                dungeon[y][x+1] = 10 if dungeon[y][x+1] != 0 else 0 # Zone traversable
-            if(dungeon[y][x-1] != 0 and y != startY and (x - 1 != end_x and x - 1!= startX)):
-                dungeon[y][x-1] = 9 if dungeon[y][x-1] != 0 else 0  # Zone traversable              
-           
-            
             if y < end_y:
                
                 y += 1
             elif y > end_y:
                
                 y -= 1
+                
+            if(dungeon[y][x+1] != 0 and y != startY  ):
+                dungeon[y][x+1] = 10 if dungeon[y][x+1] != 0 else 0 # Zone traversable
+            if(dungeon[y][x-1] != 0 and y != startY ):
+                dungeon[y][x-1] = 9 if dungeon[y][x-1] != 0 else 0  # Zone traversable              
+           
+            if(dungeon[y][x] == 0 and (dungeon[y][x-2] == 11 or dungeon[y][x-2] == 2 ) and (dungeon[y][x-1] == 9 or  dungeon[y][x-1] == 2)):
+                dungeon[y][x-1] = 23  if dungeon[y][x-1] != 0 else 0
+            if(dungeon[y][x] == 0 and (dungeon[y][x+2] == 11 or dungeon[y][x+2] == 3) and (dungeon[y][x+1] == 10 or  dungeon[y][x+1] == 3 )):
+                dungeon[y][x+1] = 22  if dungeon[y][x+1] != 0 else 0              
+            if(dungeon[y][x] == 0 and (dungeon[y][x-2] == 12 or dungeon[y][x-2] == 8 )and ( dungeon[y][x-1] == 9 or  dungeon[y][x-1] == 8 )):
+                dungeon[y][x-1] = 24  if dungeon[y][x-1] != 0 else 0
+            if(dungeon[y][x] == 0 and (dungeon[y][x+2] == 12 or dungeon[y][x+2] == 4) and ( dungeon[y][x+1] == 10 or  dungeon[y][x+1] == 10 )):
+                dungeon[y][x+1] = 21  if dungeon[y][x+1] != 0 else 0  
+            
         
     for _ in range(num_rooms):
         room_width = random.randint(min_room_size, max_room_size)
@@ -109,6 +117,14 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
             rooms.append(new_room)
 
     # Choix aléatoire d'une salle pour le spawn
+   
+
+    # Création des couloirs pour relier les salles
+    for i in range(len(rooms) - 1):
+        start = rooms[i].center()
+        end = rooms[i + 1].center()
+        add_corridor(start, end)
+        
     spawn_room = random.choice(rooms)
     spawn_x = random.randint(spawn_room.x+1, spawn_room.x + spawn_room.width - 2)
     spawn_y = random.randint(spawn_room.y+1, spawn_room.y + spawn_room.height - 2)
@@ -119,13 +135,6 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
     dungeon[out_y][out_x] = 20
     # Position de spawn
     spawn_position = (spawn_x, spawn_y)
-
-    # Création des couloirs pour relier les salles
-    for i in range(len(rooms) - 1):
-        start = rooms[i].center()
-        end = rooms[i + 1].center()
-        add_corridor(start, end)
-
     dungeon_json = {
         "map": {
             "nom": "Grotte sombre",
