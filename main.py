@@ -169,8 +169,9 @@ def main():
     draw_menu_title(screen)
 
     camera_group = CameraGroup(screen_map)
-    all_bot.append(Bot(camera_group,pos['spawn'][0] + 5 , pos['spawn'][1] + 5,"bulbizarre",map_data))
     player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data)
+    all_bot.append(Bot(camera_group,pos['spawn'][0] - 1 , pos['spawn'][1] - 1,"bulbizarre",map_data,player))
+
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
     info_bar = InfoBar(player,screen)
     
@@ -221,6 +222,8 @@ def main():
                     bot.takeDamage(10)
 
         player.image.update()
+        for bot in all_bot:
+            bot.image.update()
         info_bar.draw_info()
         camera_group.update()   
         if(player.isOnStair):

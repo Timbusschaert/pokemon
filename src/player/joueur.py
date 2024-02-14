@@ -25,7 +25,7 @@ class Joueur(pygame.sprite.Sprite):
         self.distanceParcourue = 0
         self.canMove = True
         self.isAttacked = False
-    
+        self.hasPlayed = False
     def input(self):
         keys = pygame.key.get_pressed()
         if (keys[pygame.K_UP]):
@@ -118,6 +118,9 @@ class Joueur(pygame.sprite.Sprite):
         if self.direction.x == 0 and self.direction.y == 0:
             if self.isAttacking:
                 self.isAttacking = not self.image.getIsFinished()
+                if self.isAttacking == False : 
+                    self.hasPlayed = True 
+
             elif self.isAttacked:
                 self.image = self.animationList.getHurtAnimation(self.directionAnim)
                 self.isAttacked = not self.image.getIsFinished()
@@ -133,7 +136,7 @@ class Joueur(pygame.sprite.Sprite):
     def attack(self):
         self.image = self.animationList.getAttackAnimation(self.directionAnim)
         self.isAttacking = True
-
+        
     def takeDamage(self,damage):
         self.isAttacked = True
         self.image = self.animationList.getHurtAnimation(self.directionAnim)        
@@ -158,12 +161,9 @@ class Joueur(pygame.sprite.Sprite):
                 toReturn = (self.x ,self.y + 1 )
             case DirectionEnum.DOWN_RIGHT:
                 toReturn = (self.x + 1,self.y + 1 )
-            case DirectionEnum.RIGHT:
-               toReturn = (self.x + 1,self.y + 1 )
-            case DirectionEnum.TOP_RIGHT:
-                toReturn = (self.x + 1,self.y + 1 )
-            case DirectionEnum.UP:
-                toReturn = (self.x + 1,self.y - 1 )
-            case DirectionEnum.DOWN:
-                toReturn = (self.x ,self.y + 1 )
+            case DirectionEnum.LEFT:
+               toReturn = (self.x - 1,self.y  )
+            case DirectionEnum.TOP_LEFT:
+                toReturn = (self.x - 1,self.y - 1 )
+            
         return toReturn
