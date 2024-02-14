@@ -28,26 +28,44 @@ class Joueur(pygame.sprite.Sprite):
     
     def input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_UP]:
-            self.direction.y = 0 if self.direction.x != 0 else - self.speed
+        if (keys[pygame.K_UP]):
+             print("UP : "  )
+        if (keys[pygame.K_DOWN]):
+             print("down : "  )
+        if (keys[pygame.K_LEFT]):
+             print("LEFT : "  )
+        if (keys[pygame.K_RIGHT]):
+             print("RIGHT : "  )
+
+        if keys[pygame.K_UP] and self.distanceParcourue == 0 :
+            self.direction.x = 0
+            if  self.direction.x == 0 and self.distanceParcourue == 0 :                
+                self.direction.y =  -self.speed
             self.distanceParcourue += self.speed 
-        elif keys[pygame.K_DOWN]:
-            self.direction.y = 0 if self.direction.x != 0 else self.speed
+        elif keys[pygame.K_DOWN] and self.distanceParcourue == 0:
+            self.direction.x = 0
+            if self.direction.y == 0 and self.direction.x == 0  and self.distanceParcourue == 0 :
+                self.direction.y = self.speed
             self.distanceParcourue += self.speed 
         elif self.distanceParcourue == 0:
             self.direction.y = 0       
         else :
-            self.distanceParcourue += self.speed
-        if keys[pygame.K_RIGHT]:
-            self.direction.x = 0 if self.direction.y != 0 else self.speed
             self.distanceParcourue += self.speed 
-        elif keys[pygame.K_LEFT]:
-            self.direction.x = - 0 if self.direction.y != 0 else -  self.speed
+        if keys[pygame.K_RIGHT] and self.distanceParcourue == 0 :
+            if self.direction.y == 0  :
+                self.direction.x = self.speed
+                
+            self.distanceParcourue += self.speed 
+        elif keys[pygame.K_LEFT] and self.distanceParcourue == 0 :
+            if self.direction.y == 0 :
+                self.direction.x = - self.speed           
             self.distanceParcourue += self.speed
         elif self.distanceParcourue == 0:
             self.direction.x = 0   
         elif self.distanceParcourue < (23 * self.speed) - self.speed  :
-            self.distanceParcourue += self.speed       
+            self.distanceParcourue += self.speed
+
+
         if keys[pygame.K_a]:
             self.attack()
 
@@ -128,6 +146,16 @@ class Joueur(pygame.sprite.Sprite):
     def nextDirection(self):
         toReturn = 0
         match self.directionAnim:
+            case DirectionEnum.DOWN_RIGHT:
+                toReturn = (self.x + 1,self.y + 1 )
+            case DirectionEnum.RIGHT:
+               toReturn = (self.x + 1,self.y + 1 )
+            case DirectionEnum.TOP_RIGHT:
+                toReturn = (self.x + 1,self.y + 1 )
+            case DirectionEnum.UP:
+                toReturn = (self.x + 1,self.y - 1 )
+            case DirectionEnum.DOWN:
+                toReturn = (self.x ,self.y + 1 )
             case DirectionEnum.DOWN_RIGHT:
                 toReturn = (self.x + 1,self.y + 1 )
             case DirectionEnum.RIGHT:
