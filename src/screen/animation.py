@@ -12,7 +12,7 @@ class Animation:
         # Analyse du fichier XML
         root = tree.getroot()
         self.x = x
-        
+        self.isAnimating = False
         # Accès aux données d'animation
         self.shadow_size = int(root.find('ShadowSize').text)
         anim_data = root.find('Anims/Anim')
@@ -33,14 +33,18 @@ class Animation:
     def update(self):
         # Incrémentation du compteur de frames
         self.frame_counter += 1
-
+       
+        
         # Changement de frame si le temps écoulé dépasse la durée de la frame actuelle
         if self.frame_counter >= self.durations[self.current_frame]:
             self.frame_counter = 0
             self.current_frame = (self.current_frame + 1) % self.total_frames
+            print()
+            self.isAnimating = self.current_frame != 0
+
     
     def getIsFinished(self):
-        return self.current_frame == 0 
+        return not self.isAnimating
     
     def draw(self, surface, position):
         # Calcul de la position de l'ombre

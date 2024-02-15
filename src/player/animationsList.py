@@ -68,9 +68,11 @@ class AnimationsList():
         self.hurt[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)          
     
     def getWalkCurrentAnimation(self,enumDirection):
+        self.walk
         return self.walk.get(enumDirection)
     
     def getAttackAnimation(self,enumDirection):
+        self.attack.get(enumDirection).current_frame = 0
         return self.attack.get(enumDirection)
     
     def getIdleAnimation(self,enumDirection):

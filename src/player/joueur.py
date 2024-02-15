@@ -4,7 +4,7 @@ from src.screen.animation import Animation
 from src.player.stats import Stats
 from src.player.animationsList import AnimationsList
 from src.player.directionEnum import DirectionEnum
-    
+from src.player.current_action import CurrentAction
 class Joueur(pygame.sprite.Sprite):
     
     def __init__(self,group,x,y,pokemon,map):
@@ -26,17 +26,9 @@ class Joueur(pygame.sprite.Sprite):
         self.canMove = True
         self.isAttacked = False
         self.hasPlayed = False
+
     def input(self):
         keys = pygame.key.get_pressed()
-        if (keys[pygame.K_UP]):
-             print("UP : "  )
-        if (keys[pygame.K_DOWN]):
-             print("down : "  )
-        if (keys[pygame.K_LEFT]):
-             print("LEFT : "  )
-        if (keys[pygame.K_RIGHT]):
-             print("RIGHT : "  )
-
         if keys[pygame.K_UP] and self.distanceParcourue == 0 :
             self.direction.x = 0
             if  self.direction.x == 0 and self.distanceParcourue == 0 :                
@@ -134,8 +126,9 @@ class Joueur(pygame.sprite.Sprite):
         self.hitbox = pygame.Rect(self.rect.center, (24, 24))
 
     def attack(self):
-        self.image = self.animationList.getAttackAnimation(self.directionAnim)
         self.isAttacking = True
+        self.image = self.animationList.getAttackAnimation(self.directionAnim)
+
         
     def takeDamage(self,damage):
         self.isAttacked = True
