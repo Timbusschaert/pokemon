@@ -40,44 +40,36 @@ class Bot(Joueur):
         if input == None :
             self.distanceParcourue += self.speed
     def update(self):
-        if(self.joueur.hasPlayed == True and self.input == None):
+        if(self.joueur.hasPlayed == True and self.distanceParcourue == 0):
             self.calcul_next_pos()
         print(self.x,self.y)
-        if self.distanceParcourue >= (24 * 2 ) - self.speed:
-            self.distanceParcourue = 0
-            self.direction.x = 0   
-            self.direction.y = 0   
-            self.joueur.hasPlayed = False
-            self.input = None
-        elif (self.canMove and self.distanceParcourue != 0 ):
-            self.distanceParcourue += self.speed
-            self.rect.centerx += self.direction.x     
-            self.rect.centery += self.direction.y      
+        
+            
         if(self.direction.x < 0 and self.direction.y == 0):
                 tile = self.map.get_tile(self.x -1 , self.y)
                 self.canMove = canPass(tile)   
-                if self.canMove and self.distanceParcourue == 0:
+                if self.canMove and self.distanceParcourue >= (24 * 2 ) - self.speed:
                     self.x -= 1
                 if self.directionAnim != DirectionEnum.LEFT:
                     self.directionAnim = DirectionEnum.LEFT 
         if(self.direction.x > 0 and self.direction.y == 0):
                 tile = self.map.get_tile(self.x+1 , self.y)
                 self.canMove = canPass(tile)
-                if self.canMove and self.distanceParcourue == 0:
+                if self.canMove and self.distanceParcourue >= (24 * 2 ) - self.speed:
                     self.x += 1
                 if self.directionAnim != DirectionEnum.RIGHT:
                     self.directionAnim = DirectionEnum.RIGHT
         if(self.direction.y < 0 and self.direction.x == 0):
                 tile = self.map.get_tile(self.x , self.y-1)
                 self.canMove = canPass(tile)
-                if self.canMove and self.distanceParcourue == 0:
+                if self.canMove and self.distanceParcourue >= (24 * 2 ) - self.speed:
                     self.y -= 1
                 if self.directionAnim != DirectionEnum.UP:
                     self.directionAnim = DirectionEnum.UP               
         if(self.direction.y > 0 and self.direction.x == 0):
                 tile = self.map.get_tile(self.x , self.y + 1 )
                 self.canMove = canPass(tile)
-                if self.canMove and self.distanceParcourue == 0:
+                if self.canMove and self.distanceParcourue >= (24 * 2 ) - self.speed:
                     self.y += 1
                 if self.directionAnim != DirectionEnum.DOWN:
                     self.directionAnim = DirectionEnum.DOWN
@@ -105,4 +97,12 @@ class Bot(Joueur):
         else:
             self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim) 
         
-        
+        if self.distanceParcourue >= (24 * 2 ) - self.speed:
+            self.distanceParcourue = 0
+            
+            self.joueur.hasPlayed = False
+            self.input = None
+        elif (self.canMove and self.distanceParcourue != 0 ):
+            self.distanceParcourue += self.speed
+            self.rect.centerx += self.direction.x     
+            self.rect.centery += self.direction.y

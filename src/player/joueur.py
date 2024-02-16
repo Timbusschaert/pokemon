@@ -45,8 +45,7 @@ class Joueur(pygame.sprite.Sprite):
             self.distanceParcourue += self.speed 
         if keys[pygame.K_RIGHT] and self.distanceParcourue == 0 :
             if self.direction.y == 0  :
-                self.direction.x = self.speed
-                
+                self.direction.x = self.speed              
             self.distanceParcourue += self.speed 
         elif keys[pygame.K_LEFT] and self.distanceParcourue == 0 :
             if self.direction.y == 0 :
@@ -56,8 +55,6 @@ class Joueur(pygame.sprite.Sprite):
             self.direction.x = 0   
         elif self.distanceParcourue < (23 * self.speed) - self.speed  :
             self.distanceParcourue += self.speed
-
-
         if keys[pygame.K_a]:
             self.attack()
 
@@ -65,6 +62,29 @@ class Joueur(pygame.sprite.Sprite):
         self.input()       
         if self.distanceParcourue >= (24 * 2 ) - self.speed:
             self.distanceParcourue = 0
+        self.go_to_next_position()
+        self.is_on_stair()  
+        self.change_animation()
+        
+    def change_animation(self):
+        if self.direction.x == 0 and self.direction.y == 0:
+            if self.isAttacking:
+                self.isAttacking =  self.image.getIsFinished()
+                if self.isAttacking == False : 
+                    self.hasPlayed = True 
+            elif self.isAttacked:
+                self.image = self.animationList.getHurtAnimation(self.directionAnim)
+                self.isAttacked = self.image.getIsFinished()
+            else :
+                self.image = self.animationList.getIdleAnimation(self.directionAnim)    
+        else:
+            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)  
+          
+    def is_on_stair(self):
+        if 20 == self.map.get_tile(self.x , self.y):
+            self.isOnStair = True
+    def go_to_next_position(self):
+        
         if(self.direction.x < 0 and self.direction.y == 0):
                 tile = self.map.get_tile(self.x -1 , self.y)
                 self.canMove = canPass(tile)   
@@ -104,27 +124,11 @@ class Joueur(pygame.sprite.Sprite):
                     self.directionAnim = DirectionEnum.TOP_RIGHT
         if(self.direction.y < 0 and self.direction.x < 0 ):               
                 if self.directionAnim != DirectionEnum.TOP_LEFT:
-                    self.directionAnim = DirectionEnum.TOP_LEFT           
-        if 20 == self.map.get_tile(self.x , self.y):
-                self.isOnStair = True
-        if self.direction.x == 0 and self.direction.y == 0:
-            if self.isAttacking:
-                self.isAttacking = not self.image.getIsFinished()
-                if self.isAttacking == False : 
-                    self.hasPlayed = True 
-
-            elif self.isAttacked:
-                self.image = self.animationList.getHurtAnimation(self.directionAnim)
-                self.isAttacked = not self.image.getIsFinished()
-            else :
-                self.image = self.animationList.getIdleAnimation(self.directionAnim)    
-        else:
-            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)  
+                    self.directionAnim = DirectionEnum.TOP_LEFT      
         if( self.canMove and not self.isOnStair ):
             self.rect.centerx += self.direction.x     
-            self.rect.centery += self.direction.y      
-        self.hitbox = pygame.Rect(self.rect.center, (24, 24))
-
+            self.rect.centery += self.direction.y
+            
     def attack(self):
         self.isAttacking = True
         self.image = self.animationList.getAttackAnimation(self.directionAnim)

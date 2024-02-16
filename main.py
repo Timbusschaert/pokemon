@@ -178,7 +178,7 @@ def main():
     animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
     pygame.mixer.music.load("assets/musique/fond.mp3")
     pygame.mixer.music.play(loops=-1)
-
+    clock = pygame.Clock()
     pygame.mixer.music.set_volume(1)
     while True:
         for event in pygame.event.get():
@@ -229,6 +229,7 @@ def main():
         if(player.isOnStair):
             draw_menu(screen,option_selectionnee)
         pygame.display.update()
+        
         
 if __name__ == "__main__":
     main()
