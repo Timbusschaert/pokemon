@@ -157,7 +157,7 @@ def main():
     f = open("assets/dungeon.json")
     file = json.load(f)['maps']
     pos = file[etage_index]['map']
-    map_data =  Map(100, 100,pos)          
+    map_data =  Map(pos['hauteur'], pos['largeur'],pos)          
     stair_sound = pygame.mixer.Sound("assets/musique/sounds/song340.mp3")
     stair_sound.set_volume(0.5)
     
@@ -178,7 +178,6 @@ def main():
     animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
     pygame.mixer.music.load("assets/musique/fond.mp3")
     pygame.mixer.music.play(loops=-1)
-
     pygame.mixer.music.set_volume(1)
     while True:
         for event in pygame.event.get():
@@ -202,7 +201,7 @@ def main():
                                 game_over(screen)
                             pygame.mixer.Sound.play(stair_sound)
                             pos = file[etage_index]['map']
-                            map_data =  Map(100, 100,pos)   
+                            map_data =  Map(pos['hauteur'], pos['largeur'],pos)   
                             camera_group = CameraGroup(screen_map)
                             player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data)
                             draw_map(screen_map, map_data, tileset_image,tileset_items,player)
@@ -229,6 +228,7 @@ def main():
         if(player.isOnStair):
             draw_menu(screen,option_selectionnee)
         pygame.display.update()
+        
         
 if __name__ == "__main__":
     main()

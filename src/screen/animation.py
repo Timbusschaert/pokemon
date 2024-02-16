@@ -33,18 +33,16 @@ class Animation:
     def update(self):
         # Incrémentation du compteur de frames
         self.frame_counter += 1
-       
-        
+            
         # Changement de frame si le temps écoulé dépasse la durée de la frame actuelle
         if self.frame_counter >= self.durations[self.current_frame]:
             self.frame_counter = 0
             self.current_frame = (self.current_frame + 1) % self.total_frames
-            print()
-            self.isAnimating = self.current_frame != 0
+            self.isAnimating = self.current_frame == self.total_frames - 1 and not self.isAnimating  
 
     
     def getIsFinished(self):
-        return not self.isAnimating
+        return not self.isAnimating 
     
     def draw(self, surface, position):
         # Calcul de la position de l'ombre
