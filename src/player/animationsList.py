@@ -66,6 +66,7 @@ class AnimationsList():
         self.hurt[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,False)
         self.hurt[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10,False)
         self.hurt[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,False)
+    
     def getWalkCurrentAnimation(self,enumDirection):
         return self.walk.get(enumDirection)
     

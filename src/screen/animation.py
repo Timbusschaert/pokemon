@@ -42,8 +42,7 @@ class Animation:
     def startAnimation(self):
         self.current_frame = 0 
 
-    def getIsFinished(self):
-        
+    def getIsFinished(self):       
         return self.current_frame + 1 == self.total_frames 
     
     def draw(self, surface, position):

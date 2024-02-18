@@ -110,7 +110,7 @@ def draw_menu(screen,option_selectionnee):
 def game_over(screen):
     pygame.mixer.music.stop()
     over = pygame.mixer.Sound("assets/musique/sounds/song205.mp3")
-    over.set_volume(0.5)
+    over.set_volume(0.1)
     over.play()
 
     fadeout = pygame.Surface((780, 780))
@@ -170,16 +170,15 @@ def main():
     bots = []
     bot_queue = BotQueue()
     camera_group = CameraGroup(screen_map)
-    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data)
+    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"bulbizarre",map_data)
     bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player)
-    bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
-    bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
-    bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    #bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    #bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    #bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
 
     bots.append(bot_1)
-    bots.append(bot_2)
-    bots.append(bot_3)
-    bots.append(bot_4)
+    #bots.append(bot_2)
+    
 
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
     info_bar = InfoBar(player,screen)
@@ -188,7 +187,7 @@ def main():
     
     pygame.mixer.music.load("assets/musique/fond.mp3")
     pygame.mixer.music.play(loops=-1)
-    pygame.mixer.music.set_volume(1)
+    pygame.mixer.music.set_volume(0.1)
     
     while True:
         for event in pygame.event.get():
@@ -231,26 +230,27 @@ def main():
         
         info_bar.draw_info()
         camera_group.update()
-        print(player.can_play )
-        print(bot_queue.is_empty())
-        print(bot_queue.current_bot)
+  
         if not player.can_play and bot_queue.is_empty() and bot_queue.current_bot == None:
-            print('nouveau tour')
-
             for bot in bots :
-                bot_queue.add_bot(bot)
-            bot_queue.next_bot().can_play = True
+                if bot.is_in_range():
+                    bot_queue.add_bot(bot)
+            if (not bot_queue.is_empty()):
+                bot_queue.next_bot().can_play = True
 
         if(not player.can_play):
-     
-           can_play = bot_queue.current_bot.can_play
-           if can_play == False :
-                newbot = bot_queue.next_bot()
-                if newbot == None :
-                    bot_queue.current_bot = None
-                    player.can_play = True
-                else : 
-                    newbot.can_play = True
+            if bot_queue.current_bot != None :
+                can_play = bot_queue.current_bot.can_play
+                if can_play == False :
+                        newbot = bot_queue.next_bot()
+                        if newbot == None :
+                            bot_queue.current_bot = None
+                            player.can_play = True
+                        else : 
+                            newbot.can_play = True
+            else :
+                player.can_play = True
+
 
 
         
