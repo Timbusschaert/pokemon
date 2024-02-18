@@ -6,8 +6,8 @@ from src.player.joueur import Joueur
 import json
 from src.screen.infobar import InfoBar
 from src.player.bot import Bot
-import random
 from src.screen.camera import CameraGroup
+from src.player.bot_queue import BotQueue
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255, 1)
 RED = (242, 38, 19)
@@ -103,7 +103,7 @@ def draw_menu(screen,option_selectionnee):
     screen.blit(text_info, (200, 150 ))
     screen.blit(texte_oui, (400, 200 ))
     screen.blit(texte_non, (400, 250 ))
-
+    
     # Dessiner le sélecteur autour de l'option sélectionnée
     pygame.draw.rect(screen, BLACK, (380 , 210  + 50 * option_selectionnee, 10, 10), 2)
 
@@ -167,19 +167,29 @@ def main():
     screen_map = pygame.Surface((100 * TILE_SIZE, 100 * TILE_SIZE))
 
     draw_menu_title(screen)
-
+    bots = []
+    bot_queue = BotQueue()
     camera_group = CameraGroup(screen_map)
     player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data)
-    all_bot.append(Bot(camera_group,pos['spawn'][0] - 1 , pos['spawn'][1] - 1,"bulbizarre",map_data,player))
+    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
+
+    bots.append(bot_1)
+    bots.append(bot_2)
+    bots.append(bot_3)
+    bots.append(bot_4)
 
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
     info_bar = InfoBar(player,screen)
     
     animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
+    
     pygame.mixer.music.load("assets/musique/fond.mp3")
     pygame.mixer.music.play(loops=-1)
-    clock = pygame.Clock()
     pygame.mixer.music.set_volume(1)
+    
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -212,22 +222,42 @@ def main():
                         else:
                             player.isOnStair = False
             
-        screen.fill('#71ddee')
         camera_group.custom_draw(player)
-        
-        if player.isAttacking:
-            for bot in all_bot:
-                
-                if player.nextDirection()[0] == bot.x and  player.nextDirection()[1] == bot.y:
-                    bot.takeDamage(10)
 
         player.image.update()
-        for bot in all_bot:
+
+        for bot in bots :
             bot.image.update()
+        
         info_bar.draw_info()
-        camera_group.update()   
+        camera_group.update()
+        print(player.can_play )
+        print(bot_queue.is_empty())
+        print(bot_queue.current_bot)
+        if not player.can_play and bot_queue.is_empty() and bot_queue.current_bot == None:
+            print('nouveau tour')
+
+            for bot in bots :
+                bot_queue.add_bot(bot)
+            bot_queue.next_bot().can_play = True
+
+        if(not player.can_play):
+     
+           can_play = bot_queue.current_bot.can_play
+           if can_play == False :
+                newbot = bot_queue.next_bot()
+                if newbot == None :
+                    bot_queue.current_bot = None
+                    player.can_play = True
+                else : 
+                    newbot.can_play = True
+
+
+        
         if(player.isOnStair):
             draw_menu(screen,option_selectionnee)
+        
+
         pygame.display.update()
         
         

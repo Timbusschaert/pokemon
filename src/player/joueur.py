@@ -9,23 +9,26 @@ class Joueur(pygame.sprite.Sprite):
     
     def __init__(self,group,x,y,pokemon,map):
         super().__init__(group)     
-        self.directionAnim = DirectionEnum.DOWN
         self.x = x
         self.y = y
-        self.animationList = AnimationsList(pokemon)        
+
+        self.animationList = AnimationsList(pokemon)
+        self.directionAnim = DirectionEnum.DOWN
+      
         self.image = self.animationList.getIdleAnimation(self.directionAnim)
         self.rect = self.image.image.get_rect(center = (x*24,y*24))
-        self.hitbox = pygame.Rect(self.rect.center, (24, 24))
+        self.current_action = CurrentAction.IDLE
         self.direction = pygame.math.Vector2()
         self.speed = 4
+        
         self.stats = Stats()
         self.map = map
-        self.isAttacking = False
+        self.canMove = False
         self.isOnStair= False
+        self.can_play = True
         self.distanceParcourue = 0
-        self.canMove = True
-        self.isAttacked = False
-        self.hasPlayed = False
+        
+        
 
     def input(self):
         keys = pygame.key.get_pressed()
@@ -57,9 +60,11 @@ class Joueur(pygame.sprite.Sprite):
             self.distanceParcourue += self.speed
         if keys[pygame.K_a]:
             self.attack()
+            
 
     def update(self):
-        self.input()       
+        if(self.can_play):
+            self.input()       
         if self.distanceParcourue >= (24 * 2 ) - self.speed:
             self.distanceParcourue = 0
         self.go_to_next_position()
@@ -67,22 +72,24 @@ class Joueur(pygame.sprite.Sprite):
         self.change_animation()
         
     def change_animation(self):
-        if self.direction.x == 0 and self.direction.y == 0:
-            if self.isAttacking:
-                self.isAttacking =  self.image.getIsFinished()
-                if self.isAttacking == False : 
-                    self.hasPlayed = True 
-            elif self.isAttacked:
+            if self.current_action == CurrentAction.ATTACK:
+                isAttacking = self.image.getIsFinished()
+                if isAttacking :
+                     self.current_action = CurrentAction.IDLE
+                     self.can_play = False
+
+            if self.current_action == CurrentAction.HURT:
                 self.image = self.animationList.getHurtAnimation(self.directionAnim)
                 self.isAttacked = self.image.getIsFinished()
-            else :
-                self.image = self.animationList.getIdleAnimation(self.directionAnim)    
-        else:
-            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)  
+            if self.current_action == CurrentAction.IDLE :
+                self.image = self.animationList.getIdleAnimation(self.directionAnim)                              
+            if self.current_action == CurrentAction.WALK:
+                self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)  
           
     def is_on_stair(self):
         if 20 == self.map.get_tile(self.x , self.y):
             self.isOnStair = True
+
     def go_to_next_position(self):
         
         if(self.direction.x < 0 and self.direction.y == 0):
@@ -125,12 +132,13 @@ class Joueur(pygame.sprite.Sprite):
         if(self.direction.y < 0 and self.direction.x < 0 ):               
                 if self.directionAnim != DirectionEnum.TOP_LEFT:
                     self.directionAnim = DirectionEnum.TOP_LEFT      
+        
         if( self.canMove and not self.isOnStair ):
             self.rect.centerx += self.direction.x     
             self.rect.centery += self.direction.y
             
     def attack(self):
-        self.isAttacking = True
+        self.current_action = CurrentAction.ATTACK
         self.image = self.animationList.getAttackAnimation(self.directionAnim)
 
         
@@ -138,10 +146,6 @@ class Joueur(pygame.sprite.Sprite):
         self.isAttacked = True
         self.image = self.animationList.getHurtAnimation(self.directionAnim)        
     
-    def isInAnimation(self):
-        self.isAnimated = self.image.current_frame != 0
-        if(self.isAnimated):
-            self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)
 
     def nextDirection(self):
         toReturn = 0

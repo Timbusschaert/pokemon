@@ -1,14 +1,14 @@
 import pygame
 
 class Animation:
-    def __init__(self, image, pokemon, tree, enumDirection, x):
+    def __init__(self, image, pokemon, tree, enumDirection, x ,isContinue):
         # Chargement de l'image principale
         self.image = image
         self.image.fill((255, 255, 255), None, pygame.BLEND_RGBA_MULT)
         self.pokemon=pokemon
         # Chargement de l'image de l'ombre
         self.shadow_image = pygame.image.load("assets/"+self.pokemon+"/Walk-Shadow.png")
-
+        self.isContinue = isContinue
         # Analyse du fichier XML
         root = tree.getroot()
         self.x = x
@@ -32,17 +32,19 @@ class Animation:
 
     def update(self):
         # Incrémentation du compteur de frames
-        self.frame_counter += 1
-            
+        self.frame_counter += 1          
         # Changement de frame si le temps écoulé dépasse la durée de la frame actuelle
         if self.frame_counter >= self.durations[self.current_frame]:
-            self.frame_counter = 0
-            self.current_frame = (self.current_frame + 1) % self.total_frames
-            self.isAnimating = self.current_frame == self.total_frames - 1 and not self.isAnimating  
+            self.frame_counter = 0 
+            if (self.current_frame + 1 ) % self.total_frames != 0  or self.isContinue:
+                self.current_frame = (self.current_frame + 1) % self.total_frames 
 
-    
+    def startAnimation(self):
+        self.current_frame = 0 
+
     def getIsFinished(self):
-        return not self.isAnimating 
+        
+        return self.current_frame + 1 == self.total_frames 
     
     def draw(self, surface, position):
         # Calcul de la position de l'ombre

@@ -75,6 +75,7 @@ class CameraGroup(pygame.sprite.Group):
 		for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.centery):
 			offset_pos = (sprite.rect.centerx + ( 24 - sprite.image.frame_width) // 2 ,sprite.rect.centery + ( 24 - sprite.image.frame_height)//2) - self.offset + self.internal_offset
 			sprite.image.draw(self.internal_surf,offset_pos)
+		
 		scaled_surf = pygame.transform.scale(self.internal_surf ,self.internal_surface_size_vector * self.zoom_scale)
 		scaled_rect = scaled_surf.get_rect(center = (self.half_w,self.half_h))
 

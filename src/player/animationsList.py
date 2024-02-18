@@ -19,60 +19,58 @@ class AnimationsList():
         image = pygame.image.load("assets/"+str(self.pokemon)+"/Walk-Anim.png")
         tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData.xml")
 
-        self.walk[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,7)
-        self.walk[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,7)
-        self.walk[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,7)
-        self.walk[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,7)
-        self.walk[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,7)
-        self.walk[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,3)
-        self.walk[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,5)
-        self.walk[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,3)
+        self.walk[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,7,True)
+        self.walk[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,7,True)
+        self.walk[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,7,True)
+        self.walk[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,7,True)
+        self.walk[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,7,True)
+        self.walk[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,3,True)
+        self.walk[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,5,True)
+        self.walk[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,3,True)
 
     def initAttack(self):
         image = pygame.image.load("assets/"+str(self.pokemon)+"/Attack-Anim.png")
         tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData-Attack.xml")
 
-        self.attack[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10)
-        self.attack[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10)
-        self.attack[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10)
-        self.attack[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10)
-        self.attack[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10)
-        self.attack[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10)
-        self.attack[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10)
-        self.attack[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)
+        self.attack[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10,False)
+        self.attack[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10,False)
+        self.attack[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10,False)
+        self.attack[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10,False)
+        self.attack[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10,False)
+        self.attack[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,False)
+        self.attack[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10,False)
+        self.attack[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,False)
 
     def initIdle(self):
         image = pygame.image.load("assets/"+str(self.pokemon)+"/Idle-Anim.png")
         tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData-Idle.xml")
 
-        self.idle[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10)
-        self.idle[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10)
-        self.idle[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10)
-        self.idle[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10)
-        self.idle[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10)
-        self.idle[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10)
-        self.idle[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10)
-        self.idle[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)
+        self.idle[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10,True)
+        self.idle[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10,True)
+        self.idle[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10,True)
+        self.idle[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10,True)
+        self.idle[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10,True)
+        self.idle[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,True)
+        self.idle[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10,True)
+        self.idle[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,True)
 
     def initHurt(self):
         image = pygame.image.load("assets/"+str(self.pokemon)+"/Hurt-Anim.png")
         tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData-Hurt.xml")
 
-        self.hurt[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10)
-        self.hurt[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10)
-        self.hurt[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10)
-        self.hurt[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10)
-        self.hurt[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10)
-        self.hurt[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10)
-        self.hurt[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10)
-        self.hurt[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10)          
-    
+        self.hurt[0] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN,10,False)
+        self.hurt[1] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10,False)
+        self.hurt[2] = Animation(image,self.pokemon,tree,DirectionEnum.RIGHT,10,False)
+        self.hurt[3] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10,False)
+        self.hurt[4] = Animation(image,self.pokemon,tree,DirectionEnum.UP,10,False)
+        self.hurt[5] = Animation(image,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,False)
+        self.hurt[6] = Animation(image,self.pokemon,tree,DirectionEnum.LEFT,10,False)
+        self.hurt[7] = Animation(image,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,False)
     def getWalkCurrentAnimation(self,enumDirection):
-        self.walk
         return self.walk.get(enumDirection)
     
     def getAttackAnimation(self,enumDirection):
-        self.attack.get(enumDirection).current_frame = 0
+        self.attack.get(enumDirection).startAnimation()
         return self.attack.get(enumDirection)
     
     def getIdleAnimation(self,enumDirection):
