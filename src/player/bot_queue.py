@@ -17,3 +17,5 @@ class BotQueue:
     
     def is_empty(self):
         return len(self.queue) == 0  # Check if the queue is empty
+
+    

@@ -7,7 +7,8 @@ import json
 from src.screen.infobar import InfoBar
 from src.player.bot import Bot
 from src.screen.camera import CameraGroup
-from src.player.bot_queue import BotQueue
+from src.player.bot_list import BotList
+
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255, 1)
 RED = (242, 38, 19)
@@ -167,20 +168,23 @@ def main():
     screen_map = pygame.Surface((100 * TILE_SIZE, 100 * TILE_SIZE))
 
     draw_menu_title(screen)
-    bots = []
-    bot_queue = BotQueue()
     camera_group = CameraGroup(screen_map)
-    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"bulbizarre",map_data)
-    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    
+    bots = BotList()
+
+    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data,bots)
+
+    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player,bots)
     #bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
     #bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
     #bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
 
-    bots.append(bot_1)
+    bots.add_bot(bot_1)
     #bots.append(bot_2)
     
 
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
+    
     info_bar = InfoBar(player,screen)
     
     animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
@@ -225,35 +229,11 @@ def main():
 
         player.image.update()
 
-        for bot in bots :
-            bot.image.update()
-        
         info_bar.draw_info()
         camera_group.update()
-  
-        if not player.can_play and bot_queue.is_empty() and bot_queue.current_bot == None:
-            for bot in bots :
-                if bot.is_in_range():
-                    bot_queue.add_bot(bot)
-            if (not bot_queue.is_empty()):
-                bot_queue.next_bot().can_play = True
-
-        if(not player.can_play):
-            if bot_queue.current_bot != None :
-                can_play = bot_queue.current_bot.can_play
-                if can_play == False :
-                        newbot = bot_queue.next_bot()
-                        if newbot == None :
-                            bot_queue.current_bot = None
-                            player.can_play = True
-                        else : 
-                            newbot.can_play = True
-            else :
-                player.can_play = True
-
-
-
-        
+        bots.update_bot()
+        bots.check_health_bot()
+        bots.play_turn_bot(player)    
         if(player.isOnStair):
             draw_menu(screen,option_selectionnee)
         

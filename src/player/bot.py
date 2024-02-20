@@ -3,8 +3,8 @@ from src.screen.tileset import canPass
 from src.player.current_action import CurrentAction
 import random
 class Bot(Joueur):
-    def __init__(self,group,x,y,pokemon,map,joueur):
-        super().__init__(group,x,y,pokemon,map)
+    def __init__(self,group,x,y,pokemon,map,joueur,bots):
+        super().__init__(group,x,y,pokemon,map,bots)
         self.joueur = joueur
         self.can_play = False
      
@@ -23,10 +23,8 @@ class Bot(Joueur):
                 input = 1
 
         if self.can_attack():
-            print('attack')
             if  self.current_action != CurrentAction.ATTACK:
                 self.attack()
-                self.joueur.takeDamage(2)
         else :
             if input == 0  :
                 self.direction.x = 0
@@ -39,7 +37,7 @@ class Bot(Joueur):
                 self.canMove = canPass(tile)   
             elif input == 1 :
                 self.direction.x = 0
-                if self.direction.y == 0 and self.direction.x == 0  :
+                if self.direction.y == 0 and self.direction.x == 0 and self.distanceParcourue == 0  :
                     self.direction.y = self.speed
                 self.distanceParcourue += self.speed
                 self.directionAnim = DirectionEnum.DOWN
@@ -47,7 +45,7 @@ class Bot(Joueur):
                 tile = self.map.get_tile(self.x, self.y+1)
                 self.canMove = canPass(tile)             
             elif input == 2  :
-                if self.direction.y == 0  :
+                if self.direction.y == 0 and self.distanceParcourue ==0  :
                     self.direction.x = self.speed              
                 self.distanceParcourue += self.speed
                 self.directionAnim = DirectionEnum.RIGHT 
@@ -55,16 +53,18 @@ class Bot(Joueur):
                 tile = self.map.get_tile(self.x + 1 , self.y)
                 self.canMove = canPass(tile)   
             elif input == 3  :
-                if self.direction.y == 0 :
+                if self.direction.y == 0 and self.distanceParcourue ==0 :
                     self.direction.x = - self.speed           
                 self.distanceParcourue += self.speed
                 self.current_action = CurrentAction.WALK
                 self.directionAnim = DirectionEnum.LEFT 
                 tile = self.map.get_tile(self.x - 1 , self.y)
-                self.canMove = canPass(tile)          
+                self.canMove = canPass(tile)    
+            if self.canMove == False :
+                self.calcul_next_pos()      
 
     def update(self):
-        if(self.can_play):
+        if(self.can_play and self.current_action != CurrentAction.HURT):
             self.calcul_next_pos()
         self.change_animation()
 
@@ -79,6 +79,21 @@ class Bot(Joueur):
             self.rect.centerx += self.direction.x     
             self.rect.centery += self.direction.y
         
+    def change_animation(self):
+            if self.current_action == CurrentAction.ATTACK:
+                isAttacking = self.image.getIsFinished()
+                if isAttacking :
+                    self.joueur.takeDamage(10)
+                    self.current_action = CurrentAction.IDLE
+                    self.can_play = False
+            if self.current_action == CurrentAction.HURT:
+                isAttacking = self.image.getIsFinished()
+                if isAttacking :
+                     self.current_action = CurrentAction.IDLE
+            if self.current_action == CurrentAction.IDLE :
+                self.image = self.animationList.getIdleAnimation(self.directionAnim)                              
+            if self.current_action == CurrentAction.WALK:
+                self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)
     
     def is_in_range(self):
         return (self.joueur.x - 10 <= self.x or self.joueur.x + 10 >= self.x )and ( self.joueur.y-10 >= self.y or self.joueur.y + 10 >= self.y)
@@ -86,7 +101,6 @@ class Bot(Joueur):
     def can_attack(self):
 
         if abs(self.joueur.x - self.x) == 1 and self.joueur.y == self.y:
-            print(self.joueur.x,self.x)
             return True
         elif abs(self.joueur.y - self.y) == 1 and self.joueur.x == self.x:
             return True

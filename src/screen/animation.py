@@ -21,7 +21,10 @@ class Animation:
         self.frame_height = int(anim_data.find('FrameHeight').text)
         self.durations = [int(duration.text) for duration in anim_data.findall('Durations/Duration')]
         self.direction = enumDirection
-        
+        self.total_duration = 0 
+        self.frame_counter_total = 0 
+        for i in self.durations:
+            self.total_duration += i
         # Création d'une surface pour l'animation
         self.animation_surface = pygame.Surface((self.frame_width * self.direction, self.frame_height))
         
@@ -32,18 +35,22 @@ class Animation:
 
     def update(self):
         # Incrémentation du compteur de frames
-        self.frame_counter += 1          
+        self.frame_counter += 1 
+        self.frame_counter_total += 1
         # Changement de frame si le temps écoulé dépasse la durée de la frame actuelle
         if self.frame_counter >= self.durations[self.current_frame]:
             self.frame_counter = 0 
             if (self.current_frame + 1 ) % self.total_frames != 0  or self.isContinue:
                 self.current_frame = (self.current_frame + 1) % self.total_frames 
+            
 
     def startAnimation(self):
         self.current_frame = 0 
-
-    def getIsFinished(self):       
-        return self.current_frame + 1 == self.total_frames 
+        self.frame_counter_total = 0 
+        
+    def getIsFinished(self):   
+        return self.frame_counter_total >= self.total_duration + 4
+     
     
     def draw(self, surface, position):
         # Calcul de la position de l'ombre
