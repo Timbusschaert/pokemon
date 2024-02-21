@@ -1,13 +1,15 @@
 import pygame
-
+from src.player.current_action import CurrentAction
 class Animation:
-    def __init__(self, image, pokemon, tree, enumDirection, x ,isContinue):
+    def __init__(self, image,shadow, pokemon, tree, enumDirection, x ,isContinue):
         # Chargement de l'image principale
         self.image = image
         self.image.fill((255, 255, 255), None, pygame.BLEND_RGBA_MULT)
         self.pokemon=pokemon
         # Chargement de l'image de l'ombre
-        self.shadow_image = pygame.image.load("assets/"+self.pokemon+"/Walk-Shadow.png")
+        self.shadow_image = shadow
+        self.shadow_image.fill((255, 255, 255), None, pygame.BLEND_RGBA_MULT)
+       
         self.isContinue = isContinue
         # Analyse du fichier XML
         root = tree.getroot()
@@ -52,12 +54,19 @@ class Animation:
         return self.frame_counter_total >= self.total_duration + 4
      
     
-    def draw(self, surface, position):
+    def draw(self, surface, position,pokemon):
         # Calcul de la position de l'ombre
-        #shadow_image = self.shadow_image.subsurface((self.current_frame * self.frame_width, self.frame_height * self.direction, self.frame_width, self.frame_height))
+       
+        shadow_image = self.shadow_image.subsurface((self.current_frame * self.frame_width, self.frame_height * self.direction, self.frame_width, self.frame_height))
         # Affichage de l'ombre
-        #surface.blit(shadow_image, position)
-        
+        surface.blit(shadow_image, position)
+       
         # Affichage de la surface d'animation sur la surface spécifiée
         cropped_image = self.image.subsurface((self.current_frame * self.frame_width , self.frame_height * self.direction, self.frame_width , self.frame_height))
         surface.blit(cropped_image, position)
+
+        if pokemon.current_action ==  CurrentAction.HURT:
+            font = pygame.font.Font(None, 18)
+            damage_text = font.render('-10', True, (255, 255, 255))
+            text_position = (position[0]+20, position[1] - 20)  # Positionnez le texte au-dessus de la tête du personnage
+            surface.blit(damage_text, text_position)

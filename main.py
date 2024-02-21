@@ -217,7 +217,7 @@ def main():
                             pos = file[etage_index]['map']
                             map_data =  Map(pos['hauteur'], pos['largeur'],pos)   
                             camera_group = CameraGroup(screen_map)
-                            player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data)
+                            player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data,bots)
                             draw_map(screen_map, map_data, tileset_image,tileset_items,player)
                             animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
                             
