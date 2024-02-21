@@ -38,15 +38,13 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
         x, y = start
         end_x, end_y = end
         startX = x 
-        startY = y
-        
+        startY = y       
         while x != end_x:
             dungeon[y][x] = 0 # Zone traversable               
             if x < end_x:
                 x += 1
             elif x > end_x:
                 x -= 1
-
         while y != end_y:
             dungeon[y][x] = 0            
             if y < end_y:
@@ -80,14 +78,12 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
                     dungeon[y+1][x] = 24 if dungeon[y+1][x] != 23 else 50 if dungeon[y+1][x] != 0 else 0
             if(dungeon[y][x] == 0 and (dungeon[y-2][x] == 9 or dungeon[y-2][x] == 8 )and (dungeon[y-1][x] == 11 or dungeon[y-1][x] == 8 )):
                     dungeon[y-1][x] = 23 if dungeon[y-1][x] != 24 else 50 if dungeon[y-1][x] != 0 else 0               
-            
-
+        
         while y != end_y:
             if y < end_y:
-               
+
                 y += 1
-            elif y > end_y:
-               
+            elif y > end_y:              
                 y -= 1
                 
             if(dungeon[y][x+1] != 0 and y != startY  ):
@@ -104,6 +100,19 @@ def generate_dungeon_with_corridors(width, height, num_rooms=10, min_room_size=8
             if(dungeon[y][x] == 0 and (dungeon[y][x+2] == 12 or dungeon[y][x+2] == 4) and ( dungeon[y][x+1] == 10 or  dungeon[y][x+1] == 10 )):
                 dungeon[y][x+1] = 21  if dungeon[y][x+1] != 0 else 0  
             
+        if (startY < end_y) :
+            if(startX < end_x):
+                dungeon[y][end_x+1] = 3  if  dungeon[y][end_x+1] == 5 else  dungeon[y][end_x+1]
+                dungeon[y+1][end_x+1] = 10 if dungeon[y+1][end_x+1] == 5 else dungeon[y+1][end_x+1] 
+                dungeon[startY][end_x+1] = 10  if  dungeon[startY][end_x+1] == 5 else  dungeon[startY][end_x+1]
+                dungeon[startY-1][end_x+1] = 3 if dungeon[startY][end_x+1] == 5 else dungeon[startY][end_x+1]
+            else:
+                dungeon[y][end_x-1] = 3  if  dungeon[y][end_x-1] == 5 else  dungeon[y][end_x+1]
+                dungeon[y+1][end_x-1] = 10 if dungeon[y+1][end_x-1] == 5 else dungeon[y+1][end_x+1] 
+                dungeon[startY][end_x-1] = 10  if  dungeon[startY][end_x-1] == 5 else  dungeon[startY][end_x-1]
+                dungeon[startY-1][end_x-1] = 3 if dungeon[startY][end_x-1] == 5 else dungeon[startY][end_x-1]
+                
+       
         
     for _ in range(num_rooms):
         room_width = random.randint(min_room_size, max_room_size)
@@ -170,11 +179,11 @@ class Rect:
         )
 
 # Exemple d'utilisation
-width = 100
-height = 100
+width = 50
+height = 50
 maps = []
 
-for i in range(1,4): 
+for i in range(1,2): 
     maps.append(generate_dungeon_with_corridors(width, height,index="E. " + str(i)))
 
 maps.append(generate_dungeon_with_corridors(100, 100,1,10,10,index="Sommet"))
