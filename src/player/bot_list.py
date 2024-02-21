@@ -2,9 +2,10 @@ from src.player.bot_queue import BotQueue
 class BotList:
     def __init__(self):
         self.bots = []  # A list to store bots in queue
+        self.bot_queue = BotQueue()
+
     def add_bot(self, bot,):
         self.bots.append(bot)  # Add a bot to the queue
-        self.bot_queue = BotQueue()
     def check_health_bot(self):
         for bot in self.bots :
             if bot.stats.health <= 0 :
