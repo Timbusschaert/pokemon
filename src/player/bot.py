@@ -22,7 +22,8 @@ class Bot(Joueur):
             elif self.joueur.y > self.y:
                 input = 1
 
-        if self.can_attack():
+        if self.can_attack() != None:
+            self.directionAnim = self.can_attack()
             if  self.current_action != CurrentAction.ATTACK:
                 self.attack()
         else :
@@ -90,19 +91,34 @@ class Bot(Joueur):
                 isAttacking = self.image.getIsFinished()
                 if isAttacking :
                      self.current_action = CurrentAction.IDLE
+            elif self.current_action == CurrentAction.FAINTED :
+                self.image = self.animationList.getFaintAnimation(self.directionAnim)  
+                if self.image.getIsFinished() :
+                    self.kill()
+                    self.can_play = False
             if self.current_action == CurrentAction.IDLE :
                 self.image = self.animationList.getIdleAnimation(self.directionAnim)                              
             if self.current_action == CurrentAction.WALK:
                 self.image = self.animationList.getWalkCurrentAnimation(self.directionAnim)
     
+    def kill(self):
+        self.image.image.fill((0,0,0,0))
+        self.image.shadow_image.fill((0,0,0,0))
+
+
     def is_in_range(self):
         return (self.joueur.x - 10 <= self.x or self.joueur.x + 10 >= self.x )and ( self.joueur.y-10 >= self.y or self.joueur.y + 10 >= self.y)
        
     def can_attack(self):
-
-        if abs(self.joueur.x - self.x) == 1 and self.joueur.y == self.y:
-            return True
-        elif abs(self.joueur.y - self.y) == 1 and self.joueur.x == self.x:
-            return True
-        else:
-            return False
+        to_return = None
+        if self.joueur.y == self.y:
+            if(self.joueur.x - self.x == 1):
+                to_return = DirectionEnum.RIGHT
+            elif self.joueur.x - self.x == - 1:
+                to_return = DirectionEnum.LEFT
+        elif self.joueur.x == self.x:
+            if (self.joueur.y - self.y == 1) :
+                to_return = DirectionEnum.DOWN
+            elif self.joueur.y - self.y == -1 :
+                to_return = DirectionEnum.UP
+        return to_return

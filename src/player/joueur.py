@@ -117,6 +117,10 @@ class Joueur(pygame.sprite.Sprite):
                 isAttacking = self.image.getIsFinished()
                 if isAttacking :
                      self.current_action = CurrentAction.IDLE
+            elif self.current_action == CurrentAction.FAINTED :
+                if self.image.getIsFinished() :
+                  self.kill()
+                  self.can_play = False
             elif self.current_action == CurrentAction.IDLE :
                 self.image = self.animationList.getIdleAnimation(self.directionAnim)                              
             elif self.current_action == CurrentAction.WALK:
@@ -167,10 +171,12 @@ class Joueur(pygame.sprite.Sprite):
         self.stats.health -= damage
         font = pygame.font.Font(None, 36)
         self.current_action = CurrentAction.HURT
-        self.image = self.animationList.getHurtAnimation(self.directionAnim)
-
-        text = font.render("-2", True, (255, 255, 255))
-    
+        if self.stats.health > 0 :
+            self.current_action = CurrentAction.HURT
+            self.image = self.animationList.getHurtAnimation(self.directionAnim)
+        else :
+            self.current_action = CurrentAction.FAINTED
+            self.image = self.animationList.getFaintAnimation(self.directionAnim)
 
     def nextDirection(self):
         toReturn = 0

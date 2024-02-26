@@ -13,6 +13,8 @@ class AnimationsList():
         self.initAttack()
         self.hurt = dict()
         self.initHurt()
+        self.faint = dict()
+        self.initFaint()
        
 
     def initWalk(self):
@@ -70,6 +72,21 @@ class AnimationsList():
         self.hurt[5] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,False)
         self.hurt[6] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.LEFT,10,False)
         self.hurt[7] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,False)
+    
+    def initFaint(self):
+        image = pygame.image.load("assets/"+str(self.pokemon)+"/Fainted-Anim.png")
+        tree = ET.parse("assets/"+str(self.pokemon)+"/AnimData-Faint.xml")
+        shadow = pygame.image.load("assets/"+str(self.pokemon)+"/Fainted-Shadow.png")
+
+        self.faint[0] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.DOWN,10,False)
+        self.faint[1] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.DOWN_RIGHT,10,False)
+        self.faint[2] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.RIGHT,10,False)
+        self.faint[3] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.TOP_RIGHT,10,False)
+        self.faint[4] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.UP,10,False)
+        self.faint[5] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.TOP_LEFT,10,False)
+        self.faint[6] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.LEFT,10,False)
+        self.faint[7] = Animation(image,shadow,self.pokemon,tree,DirectionEnum.DOWN_LEFT,10,False)
+
         
     def getWalkCurrentAnimation(self,enumDirection):
         return self.walk.get(enumDirection)
@@ -84,3 +101,7 @@ class AnimationsList():
     def getHurtAnimation(self,enumDirection):
         self.hurt.get(enumDirection).startAnimation()
         return self.hurt.get(enumDirection)
+
+    def getFaintAnimation(self,enumDirection):
+        self.faint.get(enumDirection).startAnimation()
+        return self.faint.get(enumDirection)

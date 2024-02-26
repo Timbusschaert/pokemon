@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<AnimData>
+	<ShadowSize>1</ShadowSize>
+	<Anims>
+		<Anim>
+			<Name>Fainted</Name>
+			<Index>15</Index>
+			<FrameWidth>32</FrameWidth>
+			<FrameHeight>24</FrameHeight>
+			<Durations>
+				<Duration>30</Duration>
+			</Durations>
+        </Anim>
+	</Anims>
+</AnimData>

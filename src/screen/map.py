@@ -1,5 +1,4 @@
 from src.screen.tileset import TilesetEnum 
-import json
 class Map:
     def __init__(self, width, height,jsonFile):
         self.width = width

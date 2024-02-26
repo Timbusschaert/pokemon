@@ -6,12 +6,11 @@ class BotList:
 
     def add_bot(self, bot,):
         self.bots.append(bot)  # Add a bot to the queue
+    
     def check_health_bot(self):
         for bot in self.bots :
             if bot.stats.health <= 0 :
-                
-                bot.image.image.fill((0, 0, 0,0))
-                self.bots.remove(bot)
+                print('dead')
         
     
     def has_bot(self,x,y):

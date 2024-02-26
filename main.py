@@ -174,12 +174,12 @@ def main():
 
     player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data,bots)
 
-    #bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player,bots)
+    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player,bots)
     #bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
     #bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
     #bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
 
-    #bots.add_bot(bot_1)
+    bots.add_bot(bot_1)
     #bots.append(bot_2)
     
 
@@ -220,8 +220,7 @@ def main():
                             player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data,bots)
                             draw_map(screen_map, map_data, tileset_image,tileset_items,player)
                             animationEtage(screen,file[etage_index]['map']['etage'],camera_group,player)
-                            
-
+                        
                         else:
                             player.isOnStair = False
             
@@ -230,8 +229,11 @@ def main():
         player.image.update()
 
         info_bar.draw_info()
+        
         camera_group.update()
+        
         bots.update_bot()
+        
         bots.check_health_bot()
         
         bots.play_turn_bot(player)    
