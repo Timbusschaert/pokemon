@@ -1,7 +1,11 @@
 import pygame
 from src.player.current_action import CurrentAction
 class Animation:
+<<<<<<< HEAD
     def __init__(self, image,shadow, pokemon, tree, enumDirection, x , isContinue):
+=======
+    def __init__(self, image,shadow, pokemon, tree, enumDirection, x ,isContinue,musique):
+>>>>>>> 438e924ed29931003b5e9504038379eefadba40c
         # Chargement de l'image principale
         self.image = image
         self.image.fill((255, 255, 255), None, pygame.BLEND_RGBA_MULT)
@@ -15,6 +19,8 @@ class Animation:
         root = tree.getroot()
         self.x = x
         self.isAnimating = False
+        self.musique = musique
+        musique.set_volume(0.5)
         # Accès aux données d'animation
         self.shadow_size = int(root.find('ShadowSize').text)
         anim_data = root.find('Anims/Anim')

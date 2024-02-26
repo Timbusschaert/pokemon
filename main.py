@@ -16,6 +16,8 @@ GREEN = (178,222,39)
 ORANGE = (196,0,51,1)
 pygame.init()
 pygame.mixer.init()
+menu_sound = pygame.mixer.Sound("assets/musique/sounds/song301.mp3")
+menu_sound.set_volume(0.5)
 font = pygame.font.Font(None, 50)
 
 # Définition des couleurs
@@ -82,8 +84,11 @@ def draw_menu_title(screen):
                 quit()
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_UP:
+                    menu_sound.play()
+
                     selected_option = (selected_option - 1) % 2
                 if event.key == pygame.K_DOWN:
+                    menu_sound.play()
                     selected_option = (selected_option + 1) % 2
                 if event.key == pygame.K_SPACE:
                     if selected_option == 0:  # Start
@@ -204,11 +209,15 @@ def main():
                     sys.exit()
                 if player.isOnStair:
                     if event.key == pygame.K_UP:
+                        menu_sound.play()
                         option_selectionnee = (option_selectionnee - 1) % 2
                     elif event.key == pygame.K_DOWN:
+                        menu_sound.play()
                         option_selectionnee = (option_selectionnee + 1) % 2
                     # Gérer l'événement de pression de la barre d'espace
                     elif event.key == pygame.K_SPACE:
+                        menu_sound.play()
+
                         if option_selectionnee == 0:
                             etage_index+=1
                             if (etage_index == len(file) ):
