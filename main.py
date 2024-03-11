@@ -5,10 +5,10 @@ import src.screen.tileset as tileset
 from src.player.joueur import Joueur
 import json
 from src.screen.infobar import InfoBar
-from src.player.bot import Bot
+from src.bot.bot import Bot
 from src.screen.camera import CameraGroup
-from src.player.bot_list import BotList
-
+from src.bot.bot_list import BotList
+from src.screen.menu_box import MenuBox
 BLACK = (0, 0, 0)
 BLUE = (0, 0, 255, 1)
 RED = (242, 38, 19)
@@ -171,22 +171,24 @@ def main():
     # Création de la carte
     screen = pygame.display.set_mode(WINDOW_SIZE)
     screen_map = pygame.Surface((100 * TILE_SIZE, 100 * TILE_SIZE))
+    menu_box = MenuBox(screen,font,["Status","Equipments"])
 
     draw_menu_title(screen)
     camera_group = CameraGroup(screen_map)
     
     bots = BotList()
 
-    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"nosferapti",map_data,bots)
+    player = Joueur(camera_group,pos['spawn'][0], pos['spawn'][1],"Aegislash",map_data,bots)
 
-    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"nosferapti",map_data,player,bots)
-    #bot_2 = Bot(camera_group,pos['spawn'][0]-2, pos['spawn'][1]-1,"nosferapti",map_data,player)
-    #bot_3 = Bot(camera_group,pos['spawn'][0]-3, pos['spawn'][1]-1,"nosferapti",map_data,player)
+    bot_1 = Bot(camera_group,pos['spawn'][0]-1, pos['spawn'][1]-1,"lugulabre",map_data,player,bots)
+    bot_2 = Bot(camera_group,pos['spawn'][0], pos['spawn'][1]-1,"nosferapti",map_data,player,bots)
+    bot_3 = Bot(camera_group,pos['spawn'][0]+1, pos['spawn'][1]-1,"Ceruledge",map_data,player,bots)
     #bot_4 = Bot(camera_group,pos['spawn'][0]-4, pos['spawn'][1]-1,"nosferapti",map_data,player)
 
     bots.add_bot(bot_1)
-    #bots.append(bot_2)
-    
+    bots.add_bot(bot_2)
+    bots.add_bot(bot_3)
+
 
     draw_map(screen_map, map_data, tileset_image,tileset_items,player)
     
@@ -207,6 +209,11 @@ def main():
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                     sys.exit()
+                if event.key == pygame.K_SPACE:
+                    menu_box.toggle_visibility()
+                if menu_box.visible :
+                    menu_box.handle_event(event)
+                    
                 if player.isOnStair:
                     if event.key == pygame.K_UP:
                         menu_sound.play()
@@ -242,7 +249,7 @@ def main():
         camera_group.update()
         
         bots.update_bot()
-        
+        menu_box.draw()
         bots.check_health_bot()
         
         bots.play_turn_bot(player)    

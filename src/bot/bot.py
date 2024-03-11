@@ -8,26 +8,26 @@ class Bot(Joueur):
         self.joueur = joueur
         self.can_play = False
      
-    def calcul_next_pos(self):
-        input = random.choice([0,1,2,3])
-
-        if (self.joueur.x - 10 <= self.x or self.joueur.x + 10 >= self.x )and (self.joueur.y-10 >= self.y or self.joueur.y + 10 >= self.y ):
-            if self.joueur.x < self.x:
-                input = 3
-            elif self.joueur.x > self.x:
-                input = 2
+    def calcul_next_pos(self,choices):
+        input = str(random.choice(choices))
         
-            elif self.joueur.y < self.y:
-                input = 0
-            elif self.joueur.y > self.y:
-                input = 1
-
+        if (self.joueur.x - 10 <= self.x or self.joueur.x + 10 >= self.x )and (self.joueur.y-10 >= self.y or self.joueur.y + 10 >= self.y ):
+            if self.joueur.x < self.x and '3' in choices:
+                input = '3'
+            elif self.joueur.x > self.x and '2' in choices:
+                input = '2'        
+            elif self.joueur.y < self.y and '0' in choices:
+                input = '0'
+            elif self.joueur.y > self.y and '1' in choices:
+                input = '1'
+            print(input)
+            
         if self.can_attack() != None:
             self.directionAnim = self.can_attack()
             if  self.current_action != CurrentAction.ATTACK:
                 self.attack()
         else :
-            if input == 0  :
+            if input == '0'  :
                 self.direction.x = 0
                 if  self.direction.x == 0 :                
                     self.direction.y = -self.speed
@@ -35,8 +35,8 @@ class Bot(Joueur):
                 self.directionAnim = DirectionEnum.UP
                 self.current_action = CurrentAction.WALK
                 tile = self.map.get_tile(self.x , self.y - 1)
-                self.canMove = canPass(tile)   
-            elif input == 1 :
+                self.canMove = canPass(tile) and self.bots.has_bot(self.x , self.y - 1) == None 
+            elif input == '1' :
                 self.direction.x = 0
                 if self.direction.y == 0 and self.direction.x == 0 and self.distanceParcourue == 0  :
                     self.direction.y = self.speed
@@ -44,29 +44,34 @@ class Bot(Joueur):
                 self.directionAnim = DirectionEnum.DOWN
                 self.current_action = CurrentAction.WALK
                 tile = self.map.get_tile(self.x, self.y+1)
-                self.canMove = canPass(tile)             
-            elif input == 2  :
+                self.canMove = canPass(tile) and self.bots.has_bot(self.x , self.y + 1) == None            
+            elif input == '2'  :
                 if self.direction.y == 0 and self.distanceParcourue ==0  :
                     self.direction.x = self.speed              
                 self.distanceParcourue += self.speed
                 self.directionAnim = DirectionEnum.RIGHT 
                 self.current_action = CurrentAction.WALK
                 tile = self.map.get_tile(self.x + 1 , self.y)
-                self.canMove = canPass(tile)   
-            elif input == 3  :
+                self.canMove = canPass(tile) and self.bots.has_bot(self.x + 1, self.y ) == None  
+            elif input == '3'  :
                 if self.direction.y == 0 and self.distanceParcourue ==0 :
                     self.direction.x = - self.speed           
                 self.distanceParcourue += self.speed
                 self.current_action = CurrentAction.WALK
                 self.directionAnim = DirectionEnum.LEFT 
                 tile = self.map.get_tile(self.x - 1 , self.y)
-                self.canMove = canPass(tile)    
+                self.canMove = canPass(tile) and self.bots.has_bot(self.x -1, self.y ) == None   
             if self.canMove == False :
-                self.calcul_next_pos()      
+               
+                if str(input) in choices:
+                    choices.remove(input)
+            
+                self.calcul_next_pos(choices)      
 
     def update(self):
         if(self.can_play and self.current_action != CurrentAction.HURT):
-            self.calcul_next_pos()
+            choices = ['0','1','2','3']
+            self.calcul_next_pos(choices)
         self.change_animation()
 
         if self.distanceParcourue > 24 * 2 :
@@ -92,7 +97,7 @@ class Bot(Joueur):
                 if isAttacking :
                      self.current_action = CurrentAction.IDLE
             elif self.current_action == CurrentAction.FAINTED :
-                self.image = self.animationList.getFaintAnimation(self.directionAnim)  
+                self.image = self.animationList.getHurtAnimation(self.directionAnim)  
                 if self.image.getIsFinished() :
                     self.kill()
                     self.can_play = False

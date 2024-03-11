@@ -1,8 +1,7 @@
 import pygame
 from src.screen.tileset import canPass
-from src.screen.animation import Animation
 from src.player.stats import Stats
-from src.player.animationsList import AnimationsList
+from src.animation.animationsList import AnimationsList
 from src.player.directionEnum import DirectionEnum
 from src.player.current_action import CurrentAction
 class Joueur(pygame.sprite.Sprite):
@@ -176,7 +175,6 @@ class Joueur(pygame.sprite.Sprite):
             self.image = self.animationList.getHurtAnimation(self.directionAnim)
         else :
             self.current_action = CurrentAction.FAINTED
-            self.image = self.animationList.getFaintAnimation(self.directionAnim)
 
     def nextDirection(self):
         toReturn = 0
@@ -192,7 +190,7 @@ class Joueur(pygame.sprite.Sprite):
             case DirectionEnum.DOWN:
                 toReturn = (self.x ,self.y + 1 )
             case DirectionEnum.DOWN_RIGHT:
-                toReturn = (self.x + 1,self.y + 1 )
+                toReturn = (self.x + 1,self.y + 1)
             case DirectionEnum.LEFT:
                toReturn = (self.x - 1 ,self.y  )
             case DirectionEnum.TOP_LEFT:

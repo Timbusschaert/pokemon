@@ -1,4 +1,4 @@
-from src.player.bot_queue import BotQueue
+from src.bot.bot_queue import BotQueue
 class BotList:
     def __init__(self):
         self.bots = []  # A list to store bots in queue
